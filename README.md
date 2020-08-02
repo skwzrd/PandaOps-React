@@ -25,7 +25,7 @@ This gif is from the [jQuery and Ajax version](https://github.com/skwzrd/PandaOp
 
 ### Use
 
-See the [getting started guide](./docs/flask_react_start_project_guide).
+See the [getting started guide](https://github.com/skwzrd/PandaOps-React/blob/master/docs/flask_react_start_project_guide.md).
 
 ### Current Design
 
