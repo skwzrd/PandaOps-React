@@ -1,0 +1,175 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    border-radius: 3px;
+}
+
+h1 {
+    text-align: center;
+}
+
+h3 {
+    padding: 0px;
+}
+
+li {
+    padding: 4px;
+}
+
+.alignleft {
+    float: left;
+}
+
+.alignright {
+    float: right;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    z-index: 1;
+    border-radius: 3px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    color: #f8f8f0;
+    border: solid 1px;
+    font-size: small;
+}
+
+.dropdown-content{
+    color: #f8f8f0;
+}
+
+body {
+    font-family: sans-serif;
+    color: #f8f8f0;
+    background-color: #1e1e1e;
+    background: #1e1e1e;
+    -webkit-font-smoothing: antialiased !important;
+}
+
+html, body, #page, #menu_left, #menu_left_content {
+    height: 100%;
+}
+
+#menu_left {
+    float: left;
+    width: 180px;
+    margin-left: -200px;
+    padding: 8px;
+}
+
+#menu_left_content {
+    background-color: #353535;
+    margin-top: 50px;
+    padding: 8px;
+    height: 300px;
+}
+
+#main_content {
+    margin-top: 58px;
+    float: right;
+    width: 100%;
+}
+
+#page {
+    margin-left: 200px;
+}
+
+
+.rendered_html tr,
+.rendered_html th,
+.rendered_html td {
+    text-align: left;
+    vertical-align: middle;
+    padding: 0.42em 0.47em;
+    line-height: normal;
+    white-space: normal;
+    max-width: none;
+    border: none;
+}
+
+.rendered_html td {
+ font-family: sans-serif !important;
+ font-size: 9.3pt;
+}
+
+.rendered_html table {
+    font-family: sans-serif !important;
+    margin-left: 8px;
+    margin-right: auto;
+    border: none;
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: #cccccc;
+    table-layout: fixed;
+}
+
+.rendered_html thead {
+    font-family: sans-serif !important;
+    font-size: 10.3pt !important;
+    background: #1e1e1e;
+    color: #cccccc;
+    border-bottom: 1px solid #1e1e1e;
+    vertical-align: bottom;
+}
+
+.rendered_html tbody tr:nth-child(odd) {
+ background: #282828;
+}
+
+.rendered_html tbody tr {
+ background: #202020;
+}
+
+.rendered_html tbody tr:hover:nth-child(odd) {
+ background: #252525;
+}
+
+.rendered_html tbody tr:hover {
+ background: #1e1e1e;
+}
+
+.rendered_html * + table {
+ margin-top: .05em;
+}
+
+.button_success,
+.button_error,
+.button_warning,
+.button_secondary {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.button_success:hover,
+.button_error:hover,
+.button_warning:hover,
+.button_secondary:hover {
+    color: rgb(187, 187, 187);
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.button_success {
+    background: rgb(28, 184, 65);
+}
+
+.button_error {
+    background: rgb(202, 60, 60);
+}
+
+.button_warning {
+    background: rgb(223, 117, 20);
+}
+
+.button_secondary {
+    background: rgb(66, 184, 221);
+}
