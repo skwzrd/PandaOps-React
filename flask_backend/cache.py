@@ -34,10 +34,12 @@ class Cache:
 
     def get_df(self, key):
         """Given a key that exists, returns a df. Otherwise returns None"""
-        if self.key_exists(key):
+        df = None
+        if key == sample:
+            df = self.get_sample_df()
+        elif self.key_exists(key):
             df = self.r_context.deserialize(self.r.get(key))
-            return df
-        return None
+        return df
 
 
     def add_df(self, key, df):
@@ -70,16 +72,14 @@ class Cache:
 
 
     def get_sample_df(self):
-        """Returns a sample df"""
-        df = self.get_df(sample)
-        if df is None:
-            df = pd.DataFrame({
-                'A': 1.,
-                'B': pd.Timestamp('20130102'),
-                'C': pd.Series(1, index=list(range(4)), dtype='float32'),
-                'D': [3] * 4,
-                'E': pd.Categorical(["test", "train", "test", "train"]),
-                'F': 'foo'
-            })
-            self.add_df(sample, df)
+        """Returns a sample df, also adds it to storage"""
+        df = pd.DataFrame({
+            'A': 1.,
+            'B': pd.Timestamp('20130102'),
+            'C': pd.Series(1, index=list(range(4)), dtype='float32'),
+            'D': [3] * 4,
+            'E': pd.Categorical(["test", "train", "test", "train"]),
+            'F': 'foo'
+        })
+        self.add_df(sample, df)
         return df

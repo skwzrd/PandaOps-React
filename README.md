@@ -19,7 +19,7 @@ And most importantly, being able to do all these things together seamlessly.
 
 ### Snapshot
 
-This gif is from the [jQuery and Ajax version](https://github.com/skwzrd/PandaOps-Ajax-and-jQuery). I still have a couple features to rewrite in React to catch up to this.
+Right now you'll notice that 10 rows load by default and when users click "All". This is because I plan to dynamically add rows when users scroll downwards.
 
 ![Preview](resources/preview.gif)
 

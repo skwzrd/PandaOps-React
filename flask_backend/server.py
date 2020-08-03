@@ -16,29 +16,28 @@ from cache import Cache
 # save modified df's
 # hide/show left menu
 # solve bug that hide Select button after a while
-# check for duplicate records
-# refactor components
 # load more rows when scrolling down with "All" selected
-# show number of loaded dfs
-
+# reduce number of api calls with react state logic
 
 # DONE
 # ====
+# refactor components
+# info panel
+# check for duplicate records
+# show number of loaded dfs
 # replace df list dropdown with <ul>
 # rearrange buttons
 # do not store df's in sessions (there is 4092 byte limit) - find something else
 # css styling (good enough for now)
 
 
-app = Flask(__name__, static_url_path='/static')
+app = Flask(__name__)
 
 c = Cache()
-
 
 app.config.update(
     ALLOWED_FILETYPES={'.csv'},
     SECRET_KEY=os.urandom(24).hex(),
-    UPLOAD_FOLDER='static/temp',
     SESSION_COOKIE_SAMESITE='Lax'
 )
 
@@ -76,17 +75,49 @@ def get_df():
     d = {}
     d['status'] = 0
 
+    df = None
     df = c.get_df(name)
-    if name == 'sample':
-        df = c.get_sample_df()
-        c.add_df(name, df)
-        
+
     if isinstance(df, pd.DataFrame):
         df = operate(df, cmd)
         d['name'] = name
         d['df'] = get_html_df(df)
         d['status'] = 1
 
+    return jsonify(d)
+
+
+def get_field(field, df):
+    result = None
+    if field == 'duplicates':
+        result = str(any(df.duplicated()))
+    return result
+
+
+@app.route('/metadata')
+def get_metadata():
+    """Retrieves metadata for a df given a df name in a request"""
+    name = request.args.get('name')
+    
+    d = {}
+    d['status'] = 0
+    fields = ['duplicates']
+
+    df = c.get_df(name)
+    if df is not None:
+        d['status'] = 1
+        for field in fields:
+            d[field] = get_field(field, df)
+    print(d)
+    return jsonify(d)
+
+
+@app.route('/clear_cache')
+def clear_cache():
+    print(request.args)
+    c.remove_all_dfs()
+    d = {}
+    d['status'] = 1
     return jsonify(d)
 
 
@@ -110,7 +141,6 @@ def get_df_from_request_file(f):
         print('Adding df')
         c.add_df(filename, df)
     return df
-
 
 
 @app.route('/upload_csv', methods=['POST'])
