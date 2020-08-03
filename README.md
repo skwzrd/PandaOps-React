@@ -4,7 +4,7 @@
 
 A quick way to view and edit tabular data using the [pandas](https://pandas.pydata.org/) library for Python.
 
-I initially wrote this [using jQuery and Ajax](https://github.com/skwzrd/PandaOps-Ajax-and-jQuery) to handle the frontend, but they weren't well suited for a SPA with many updating elements. There were simply too many states and knock on effects to keep track of. This time I am using React to handle the frontend while sticking with a Flask API for the backend.
+I initially wrote this [using jQuery and Ajax](https://github.com/skwzrd/PandaOps-Ajax-and-jQuery) to handle the frontend, but they weren't well suited for a SPA with many updating elements. There were simply too many states and knock on effects to keep track of easily. This time I am using React to handle the frontend while sticking with a Flask API for the backend.
 
 
 ### Motivation
@@ -23,13 +23,15 @@ This gif is from the [jQuery and Ajax version](https://github.com/skwzrd/PandaOp
 
 ![Preview](resources/preview.gif)
 
-### Use
+### Development Setup
 
-See the [getting started guide](https://github.com/skwzrd/PandaOps-React/blob/master/docs/flask_react_start_project_guide.md).
+See the [getting started guide](docs/flask_react_start_project_guide.md). If you've already set up this project, use `venv\Scripts\activate && flask run` `yarn start`, in separate Command Prompts, to set up both servers.
 
 ### Current Design
 
+React manages all the states and resulting views while Flask remains stateless.
 
+![Design](resources/draw_io_design.png)
 
 ### Previous Design
 
