@@ -10,6 +10,10 @@ export default class App extends Component {
   constructor(props){
     super(props);
     this.state = this.initialState;
+    let debug = true;// manually set while developing
+    if(debug === true){
+      this.fetchDf("sample", "All");
+    }
   }
 
 
@@ -20,7 +24,12 @@ export default class App extends Component {
       cmd: "All",
       count: 0, // avoids fetching the same df state more than once
       names: [],
-      duplicates: "NA"
+      length: null,
+      dtypes: null,
+      duplicates_bool: null,
+      duplicates_count: null,
+      duplicates_index: null,
+      unique_per_column: null,
     };
   }
 
@@ -50,33 +59,36 @@ export default class App extends Component {
   }
 
 
-  fetchDfMetadata = (name) => {
-    fetch(`/metadata?name=${name}`)
-    .then(response => response.json())
-    .then((data) =>
-    {
-      if (data.status === 1) {
-        this.setState({
-          duplicates: data.duplicates,
-        });
-      } else {
-        alert("Couldn't acquire metadata for: "+name);
+  setDf = (name, cmd, data) => {
+    // this.setState({
+    //   name: name,
+    //   df: ReactHtmlParser(df),
+    //   cmd: "All",
+    //   count: 0,
+    //   names: this.state.names.concat(name.toString())
+    // })
+    if (data.status === 1) {
+      var state = null;
+      state = {
+        name: name,
+        df: ReactHtmlParser(data.df),
+        cmd: cmd,
+        count: this.state.count + 1,
       }
-    })
-  }
-
-
-  setDf = (name, df) => {
-    this.setState({
-      name: name,
-      df: ReactHtmlParser(df),
-      cmd: "All",
-      count: 0,
-      names: this.state.names.concat(name.toString())
-    })
-    this.addName(name);
-    this.fetchDfMetadata(name);
-    console.log("Df set.");
+      // we get some extra metrics when cmd === all
+      if(cmd==="All"){
+        state.duplicates_bool = data.duplicates_bool;
+        state.duplicates_count = data.duplicates_count;
+        state.duplicates_index = data.duplicates_index;
+        state.length = data.length;
+        state.dtypes = data.dtypes;
+        state.unique_per_column = data.unique_per_column;
+      }
+      this.setState(state);
+      this.addName(name);
+    } else {
+      alert("Couldn't acquire dataframe: "+name);
+    }
   }
 
   
@@ -106,19 +118,8 @@ export default class App extends Component {
       .then(response => response.json())
       .then((data) =>
       {
-        if (data.status === 1) {
-          this.setState({
-            name: name,
-            df: ReactHtmlParser(data.df),
-            cmd: cmd,
-            count: this.state.count + 1,
-          });
-        } else {
-          alert("Couldn't acquire dataframe: "+name);
-        }
+        this.setDf(name, cmd, data);
       })
-      this.addName(name);
-      this.fetchDfMetadata(name);
     }
     console.log("Df fetched.");
   }
@@ -129,8 +130,7 @@ export default class App extends Component {
     return (
       <div id="main_content">
         <LeftPanel
-          name={this.state.name}
-          duplicates={this.state.duplicates}
+          state={this.state}
         />
        
         <Selection
