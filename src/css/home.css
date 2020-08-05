@@ -70,9 +70,43 @@ html, body, #page, #menu_left, #menu_left_content {
     height: 100%;
 }
 
+.indent {
+    text-indent: 10px;
+}
+
+.left_menu_section {
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 8px;
+    height: auto;
+    white-space: pre-line;
+    margin: 2px;
+}
+
+.duplicates {
+    background-color: #005021;
+    border-color: #007531;
+}
+
+.dtypes {
+    background-color: #b98800;
+    border-color: #584400;
+}
+
+.rows {
+    background-color: #006666;
+    border-color: #003342;
+}
+
+.unique_per_column{
+    background-color: #2c0046;
+    border-color: #1f0042;
+}
+
 #menu_left {
     float: left;
-    width: 150px;
+    width: 180px;
     margin-right: 8px;
     height: 100%;
 }

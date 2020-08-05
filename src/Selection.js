@@ -25,7 +25,7 @@ export default class Selection extends Component {
         alert('Error uploading file');
       } else {
         console.log("File uploaded.");
-        this.props.setDf(res.name, res.df);
+        this.props.setDf(res.name, "All", res);
       }
     }
   };

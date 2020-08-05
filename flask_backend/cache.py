@@ -35,10 +35,10 @@ class Cache:
     def get_df(self, key):
         """Given a key that exists, returns a df. Otherwise returns None"""
         df = None
-        if key == sample:
-            df = self.get_sample_df()
-        elif self.key_exists(key):
+        if self.key_exists(key):
             df = self.r_context.deserialize(self.r.get(key))
+        elif key == sample:
+            df = self.get_sample_df()
         return df
 
 

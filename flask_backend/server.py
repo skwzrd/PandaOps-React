@@ -15,7 +15,6 @@ from cache import Cache
 # save plots
 # save modified df's
 # hide/show left menu
-# solve bug that hide Select button after a while
 # load more rows when scrolling down with "All" selected
 # reduce number of api calls with react state logic
 
@@ -64,6 +63,43 @@ def operate(df, cmd):
     return df
 
 
+def add_metrics(d, df):
+    """Adds df metrics to d"""
+    df_dups: pd.Series = df.duplicated()
+    df_duplicate_indicies: pd.Series = df[df_dups==True].index
+
+    _d = {
+        'duplicates_bool': any(df_dups),
+        'duplicates_count': len(df_duplicate_indicies),
+        'duplicates_index': df_duplicate_indicies.to_list(),
+        'length': len(df.index),
+        'dtypes': {k:str(v) for k, v in df.dtypes.to_dict().items()},
+        'unique_per_column': {col: df[col].nunique() for col in df.columns},
+    }
+
+    for k, v in _d.items():
+        # print(str(k) + str(v))
+        d[k] = v
+
+    return d
+
+
+def get_d_response(d, name, df, cmd):
+    try:
+        # We only want to get metrics when
+        # a new df is selected
+        if cmd == "All":
+            d = add_metrics(d, df)
+        df = operate(df, cmd)
+        d['name'] = name
+        d['df'] = get_html_df(df)
+        d['status'] = 1
+    except Exception as e:
+        print(e)
+        d['status'] = 0
+    return d
+
+
 @app.route('/dataframe')
 def get_df():
     """Retreives a df from storage.
@@ -74,41 +110,10 @@ def get_df():
 
     d = {}
     d['status'] = 0
-
-    df = None
     df = c.get_df(name)
 
     if isinstance(df, pd.DataFrame):
-        df = operate(df, cmd)
-        d['name'] = name
-        d['df'] = get_html_df(df)
-        d['status'] = 1
-
-    return jsonify(d)
-
-
-def get_field(field, df):
-    result = None
-    if field == 'duplicates':
-        result = str(any(df.duplicated()))
-    return result
-
-
-@app.route('/metadata')
-def get_metadata():
-    """Retrieves metadata for a df given a df name in a request"""
-    name = request.args.get('name')
-    
-    d = {}
-    d['status'] = 0
-    fields = ['duplicates']
-
-    df = c.get_df(name)
-    if df is not None:
-        d['status'] = 1
-        for field in fields:
-            d[field] = get_field(field, df)
-    print(d)
+        d = get_d_response(d, name, df, cmd)
     return jsonify(d)
 
 
@@ -152,9 +157,7 @@ def upload_file():
         file = request.files['file_from_react']
         print(f"Uploading file {file.filename}")
         df = get_df_from_request_file(file)
-        d['df'] = get_html_df(df)
-        d['name'] = file.filename
-        d['status'] = 1
+        d = get_d_response(d, file.filename, df, "All")
 
     except Exception as e:
         print(f"Couldn't upload file {e}")
