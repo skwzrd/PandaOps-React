@@ -6,10 +6,10 @@ class Operations extends Component {
   var operations = null;
   if(this.props.DataFramePresent()){
     operations = <div id="operations">
-      <button className="button_secondary" type="button" onClick={(e) => this.props.Operator(e)}>All</button>
-      <button className="button_secondary" type="button" onClick={(e) => this.props.Operator(e)}>Head</button>
-      <button className="button_secondary" type="button" onClick={(e) => this.props.Operator(e)}>Tail</button>
-      <button className="button_secondary" type="button" onClick={(e) => this.props.Operator(e)}>Stats</button>
+      <button className="button_secondary" type="button" onClick={(e) => this.props.operator(e)}>All</button>
+      <button className="button_secondary" type="button" onClick={(e) => this.props.operator(e)}>Head</button>
+      <button className="button_secondary" type="button" onClick={(e) => this.props.operator(e)}>Tail</button>
+      <button className="button_secondary" type="button" onClick={(e) => this.props.operator(e)}>Stats</button>
     </div>
   }
 

@@ -33,3 +33,4 @@ redis_output.txt
 flask_backend/venv
 *.drawio
 *.xml
+clones.png

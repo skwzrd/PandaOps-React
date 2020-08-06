@@ -17,7 +17,11 @@ There are repetitive work flows that exist when dealing with tablular data which
 
 And most importantly, being able to do all these things together seamlessly.
 
-### Latest Update Feature 👀
+### Latest Update Features 👀
+
+Here is a demo of our new dynamic row loading!
+
+![Preview](resources/dynamic_row_loading.gif)
 
 We got DataFrame metrics populating our left menu panel and things are looking colourful! Something will have to be worked out when we have long column names though... maybe we will display up to N column characters.
 
