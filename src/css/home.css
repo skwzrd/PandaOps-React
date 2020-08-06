@@ -108,7 +108,7 @@ html, body, #page, #menu_left, #menu_left_content {
     float: left;
     width: 180px;
     margin-right: 8px;
-    height: 100%;
+    position: fixed;
 }
 
 #menu_left_content {
@@ -122,8 +122,7 @@ html, body, #page, #menu_left, #menu_left_content {
 }
 
 #main_content {
-    float: right;
-    width: 100%;
+    padding-left: 190px;
 }
 
 
@@ -146,13 +145,12 @@ html, body, #page, #menu_left, #menu_left_content {
 
 .rendered_html table {
     font-family: sans-serif !important;
-    margin-left: 8px;
-    margin-right: auto;
     border: none;
     border-collapse: collapse;
     border-spacing: 0;
     color: #cccccc;
     table-layout: fixed;
+    margin: 8px;
 }
 
 .rendered_html thead {

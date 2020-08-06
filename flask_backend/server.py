@@ -4,31 +4,6 @@ import pandas as pd
 from flask import Flask, jsonify, request
 from cache import Cache
 
-# TODO
-# ====
-# filter by column values
-# show/hide column dtypes
-# convert column dtypes
-# apply methods on dfs
-# create/remove columns
-# plot df's
-# save plots
-# save modified df's
-# hide/show left menu
-# load more rows when scrolling down with "All" selected
-# reduce number of api calls with react state logic
-
-# DONE
-# ====
-# refactor components
-# info panel
-# check for duplicate records
-# show number of loaded dfs
-# replace df list dropdown with <ul>
-# rearrange buttons
-# do not store df's in sessions (there is 4092 byte limit) - find something else
-# css styling (good enough for now)
-
 
 app = Flask(__name__)
 
@@ -40,15 +15,33 @@ app.config.update(
     SESSION_COOKIE_SAMESITE='Lax'
 )
 
-# How many df rows do you want rendered per request
-ROW_CHUNK = 10
+# How many df rows do you want retrieved per request
+ROW_CHUNK = int(c.configs['ROW_CHUNK'])
 
 
-def get_html_df(df, min_chunk=0, max_chunk=ROW_CHUNK, **kwargs):
-    """Turns dfs into chunked html tables"""
+def date_cols_to_strfmt(df):
+    col_dtypes = {k:str(v) for k, v in df.dtypes.to_dict().items()}
+    for k, v in col_dtypes.items():
+        if 'datetime' in v:
+            df[k] = df[k].astype(str)
+    return df
+
+
+def get_html_df(df, cmd, lower=0, upper=ROW_CHUNK):
+    """Turns dfs into chunked json.
+
+        Have this called after using any date metrics
+        because dates get converted to string due to formatting
+        limitations of to_json().
+        https://github.com/pandas-dev/pandas/issues/22317
+        """
     if df is not None:
-        df = df.iloc[min_chunk: max_chunk]
-        df = df.to_html(**kwargs)
+        df = df.iloc[lower: upper]
+        if cmd == 'All':
+            df = date_cols_to_strfmt(df)
+            df = df.to_json(orient='split')
+        else:
+            df = df.to_html()
     return df
 
 
@@ -78,7 +71,6 @@ def add_metrics(d, df):
     }
 
     for k, v in _d.items():
-        # print(str(k) + str(v))
         d[k] = v
 
     return d
@@ -90,9 +82,15 @@ def get_d_response(d, name, df, cmd):
         # a new df is selected
         if cmd == "All":
             d = add_metrics(d, df)
-        df = operate(df, cmd)
+            rows = len(df.index)
+            if rows < ROW_CHUNK:
+                d['fetched_rows'] = len(df.index)
+            else:
+                d['fetched_rows'] = ROW_CHUNK
+        else:
+            df = operate(df, cmd)
         d['name'] = name
-        d['df'] = get_html_df(df)
+        d['df'] = get_html_df(df, cmd)
         d['status'] = 1
     except Exception as e:
         print(e)
@@ -114,6 +112,27 @@ def get_df():
 
     if isinstance(df, pd.DataFrame):
         d = get_d_response(d, name, df, cmd)
+    return jsonify(d)
+
+
+@app.route('/fetchRows')
+def fetch_rows():
+    """Returns df containing with rows spanning from
+        index lower to index lower + ROW_CHUNK"""
+
+    name = request.args.get('name')
+    lower = int(request.args.get('lower'))
+
+    d = {}
+    d['status'] = 0
+    df = c.get_df(name)
+
+    if isinstance(df, pd.DataFrame):
+        d['name'] = name
+        df = df.iloc[lower: lower + ROW_CHUNK]
+        d['fetched_rows'] = len(df)
+        d['df'] = get_html_df(df, 'All')
+        d['status'] = 1
     return jsonify(d)
 
 
