@@ -3,13 +3,13 @@ import React, { Component } from "react";
 export default class LoadedDfs extends Component{
   
   getValue = (e) => {
-    this.props.fetchDf(e.target.innerHTML, "All");
+    this.props.fetchDf(e.target.innerHTML, this.props.All);
   }
 
 
   getNames = (names) => {
     let content = [];
-    if(!this.props.DataFramePresent()){
+    if(!this.props.isDataFramePresent()){
       return null;
     }
     for (let i = 0; i < names.length; i++) {
@@ -23,7 +23,7 @@ export default class LoadedDfs extends Component{
   render() {
     var names = this.getNames(this.props.names);
     var list = null;
-    if(this.props.DataFramePresent()){
+    if(this.props.isDataFramePresent()){
       list = <div className="dropdown alignleft">
         <div id="select_df_dropdown">
           <button id="select_df_button" className="dropbtn button_warning">Select ({names.length})</button>

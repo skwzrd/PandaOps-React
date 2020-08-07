@@ -9,7 +9,7 @@ class LeftPanel extends Component {
       let rows = []
       rows.push(<div>Rows: {this.props.state.length}</div>);
       let displayed = "NA";
-      if(this.props.state.cmd === "All"){
+      if(this.props.state.cmd === this.props.state.All){
         displayed = this.props.state.fetched_rows;
       }
       rows.push(<div>Displayed: {displayed}</div>);

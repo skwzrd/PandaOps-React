@@ -40,7 +40,7 @@ export default class DataFrame extends Component {
 
   render() {
     var table = null;
-    if(this.props.cmd === 'All'){
+    if(this.props.cmd === this.props.All){
       table = this.generateDf(this.props.df_cols, this.props.df_rows);
     } else {
       table = this.props.df;

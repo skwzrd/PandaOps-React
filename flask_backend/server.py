@@ -3,11 +3,16 @@ from io import BytesIO
 import pandas as pd
 from flask import Flask, jsonify, request
 from cache import Cache
-
+from json import load as json_load
+from typing import NamedTuple
 
 app = Flask(__name__)
 
 c = Cache()
+
+All = "All"
+class props(NamedTuple):
+    All = json_load(open('..\\src\\shared_props.json'))[All]
 
 app.config.update(
     ALLOWED_FILETYPES={'.csv'},
@@ -37,7 +42,7 @@ def get_html_df(df, cmd, lower=0, upper=ROW_CHUNK):
         """
     if df is not None:
         df = df.iloc[lower: upper]
-        if cmd == 'All':
+        if cmd == props.All:
             df = date_cols_to_strfmt(df)
             df = df.to_json(orient='split')
         else:
@@ -80,7 +85,7 @@ def get_d_response(d, name, df, cmd):
     try:
         # We only want to get metrics when
         # a new df is selected
-        if cmd == "All":
+        if cmd == props.All:
             d = add_metrics(d, df)
             rows = len(df.index)
             if rows < ROW_CHUNK:
@@ -131,7 +136,7 @@ def fetch_rows():
         d['name'] = name
         df = df.iloc[lower: lower + ROW_CHUNK]
         d['fetched_rows'] = len(df)
-        d['df'] = get_html_df(df, 'All')
+        d['df'] = get_html_df(df, props.All)
         d['status'] = 1
     return jsonify(d)
 
@@ -176,7 +181,7 @@ def upload_file():
         file = request.files['file_from_react']
         print(f"Uploading file {file.filename}")
         df = get_df_from_request_file(file)
-        d = get_d_response(d, file.filename, df, "All")
+        d = get_d_response(d, file.filename, df, props.All)
 
     except Exception as e:
         print(f"Couldn't upload file {e}")

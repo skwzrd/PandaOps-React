@@ -30,7 +30,7 @@ We got DataFrame metrics populating our left menu panel and things are looking c
 
 ### Snapshot ⏲
 
-Right now you'll notice that 10 rows load by default and when users click "All". This is because I plan to dynamically add rows when users scroll downwards.
+Right now you'll notice that 10 rows load by default and when users click all. This is because I plan to dynamically add rows when users scroll downwards.
 
 ![Preview](resources/preview.gif)
 
