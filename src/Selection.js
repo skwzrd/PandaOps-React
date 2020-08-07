@@ -25,7 +25,7 @@ export default class Selection extends Component {
         alert('Error uploading file');
       } else {
         console.log("File uploaded.");
-        this.props.setDf(res.name, "All", res);
+        this.props.setDf(res.name, this.props.All, res);
       }
     }
   };
@@ -54,14 +54,15 @@ export default class Selection extends Component {
               <form>
                   <input type="file" onChange={this.uploadFile}></input>
               </form>
-              <button onClick={() => this.props.fetchDf("sample", "All")}>Add Sample DF</button>
+              <button onClick={() => this.props.fetchDf("sample", this.props.All)}>Add Sample DF</button>
           </div>
         </div>
         <LoadedDfs 
           initial_name={this.props.names}
           names={this.props.names}
           fetchDf={this.props.fetchDf}
-          DataFramePresent={this.props.DataFramePresent}
+          isDataFramePresent={this.props.isDataFramePresent}
+          All={this.props.All}
         />
         
         <button onClick={this.clearCache} className="button_error alignright">Clear</button>
