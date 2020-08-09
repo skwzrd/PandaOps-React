@@ -21,7 +21,7 @@ And most importantly, being able to do all these things together seamlessly.
 
 Column metrics have been removed from the left menu panel and placed within the dataframe table beneath column names.
 
-![Preview](resources/column_metrics.png)
+![Preview](resources/column_metrics.PNG)
 
 
 ### Snapshot ⏲
