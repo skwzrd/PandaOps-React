@@ -19,20 +19,14 @@ And most importantly, being able to do all these things together seamlessly.
 
 ### Latest Update Features 👀
 
-Here is a demo of our new dynamic row loading!
+Column metrics have been removed from the left menu panel and placed within the dataframe table beneath column names.
 
-![Preview](resources/dynamic_row_loading.gif)
-
-We got DataFrame metrics populating our left menu panel and things are looking colourful! Something will have to be worked out when we have long column names though... maybe we will display up to N column characters.
-
-![Preview](resources/feat_metrics.PNG)
+![Preview](resources/column_metrics.png)
 
 
 ### Snapshot ⏲
 
-Right now you'll notice that 10 rows load by default and when users click all. This is because I plan to dynamically add rows when users scroll downwards.
-
-![Preview](resources/preview.gif)
+![Preview](resources/snapshot.gif)
 
 ### Development Setup ✅
 

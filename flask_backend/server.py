@@ -72,7 +72,7 @@ def add_metrics(d, df):
         'duplicates_index': df_duplicate_indicies.to_list(),
         'length': len(df.index),
         'dtypes': {k:str(v) for k, v in df.dtypes.to_dict().items()},
-        'unique_per_column': {col: df[col].nunique() for col in df.columns},
+        'uniques': {col: df[col].nunique() for col in df.columns},
     }
 
     for k, v in _d.items():
