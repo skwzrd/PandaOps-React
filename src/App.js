@@ -35,7 +35,7 @@ export default class App extends Component {
       duplicates_bool: null,
       duplicates_count: null,
       duplicates_index: null,
-      unique_per_column: null,
+      uniques: null, // unique value count per column (df[col].nunique())
       All: _All, // all as in 'displays all unprocessed/manipulated df rows'
     };
   }
@@ -99,7 +99,7 @@ export default class App extends Component {
           fetched_rows: data.fetched_rows,
           length: data.length,
           dtypes: data.dtypes,
-          unique_per_column: data.unique_per_column,
+          uniques: data.uniques,
         }
       } else {
         state = {
@@ -168,7 +168,6 @@ export default class App extends Component {
 
 
   render() {
-    
     return (
       <div>
         <LeftPanel
@@ -198,6 +197,8 @@ export default class App extends Component {
 
           <DataFrame
             cmd={this.state.cmd}
+            dtypes={this.state.dtypes}
+            uniques={this.state.uniques}
             df={this.state.df}
             df_cols={this.state.df_cols}
             df_rows={this.state.df_rows}

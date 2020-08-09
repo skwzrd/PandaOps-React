@@ -99,7 +99,7 @@ html, body, #page, #menu_left, #menu_left_content {
     border-color: #003342;
 }
 
-.unique_per_column{
+.uniques{
     background-color: #2c0046;
     border-color: #1f0042;
 }
@@ -125,6 +125,14 @@ html, body, #page, #menu_left, #menu_left_content {
     padding-left: 190px;
 }
 
+.column_info {
+    background-color: #004750 !important;
+    font-size: 10.3pt !important;
+}
+
+.column_names {
+    background-color: #003036 !important;
+}
 
 .rendered_html tr,
 .rendered_html th,
@@ -139,13 +147,13 @@ html, body, #page, #menu_left, #menu_left_content {
 }
 
 .rendered_html td {
- font-family: sans-serif !important;
- font-size: 9.3pt;
+    font-family: sans-serif !important;
+    font-size: 9.3pt;
 }
 
 .rendered_html table {
-    font-family: sans-serif !important;
     border: none;
+    font-family: sans-serif !important;
     border-collapse: collapse;
     border-spacing: 0;
     color: #cccccc;
@@ -156,9 +164,8 @@ html, body, #page, #menu_left, #menu_left_content {
 .rendered_html thead {
     font-family: sans-serif !important;
     font-size: 10.3pt !important;
-    background: #1e1e1e;
+    background-color: #003036;
     color: #cccccc;
-    border-bottom: 1px solid #1e1e1e;
     vertical-align: bottom;
 }
 
@@ -178,14 +185,15 @@ html, body, #page, #menu_left, #menu_left_content {
  background: #1e1e1e;
 }
 
-.rendered_html * + table {
+.rendered_html + table {
  margin-top: .05em;
 }
 
 .button_success,
 .button_error,
 .button_warning,
-.button_secondary {
+.button_secondary,
+.button_blend {
     color: white;
     border-radius: 4px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
@@ -195,7 +203,8 @@ html, body, #page, #menu_left, #menu_left_content {
 .button_error:hover,
 .button_warning:hover,
 .button_plain:hover,
-.button_secondary:hover {
+.button_secondary:hover,
+.button_blend:hover {
     color: rgb(187, 187, 187);
     border-radius: 4px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
@@ -219,4 +228,9 @@ html, body, #page, #menu_left, #menu_left_content {
 
 .button_secondary {
     background: rgb(66, 184, 221);
+}
+
+.button_blend {
+    margin-top: 16px;
+    background: rgb(109, 121, 121);
 }

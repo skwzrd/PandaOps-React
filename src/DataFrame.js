@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
 
 export default class DataFrame extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      showing: true,
+    }
+  }
+
+  show_hide = () => {
+    this.setState({ showing: !this.state.showing });
+  }
 
   // https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_json.html
   // we can't use df.to_html() if we want to append row chunks together
@@ -10,15 +20,39 @@ export default class DataFrame extends Component {
     var body = [];
     
     try {
-      header.push(<th key={"h"}></th>);
+      // column names
+      header.push(<th className="column_names" key={"th"}>columns</th>);
       cols.forEach((col, i) => {
-        header.push(<th key={i+"h"}>{col}</th>);
+        header.push(<th className="column_names" key={"th_"+String(i)}>{col}</th>);
       });
-      
+
+      if(this.state.showing){
+        // dtypes
+        if(this.props.dtypes){
+          let dtypes = [<th key={"dtype"}>dtypes</th>];
+          cols.map((col, i) => {
+            dtypes.push(<td key={"dtype_"+String(i)}>{this.props.dtypes[col]}</td>);
+            return null;
+          });
+          body.push(<tr className="column_info" key={"tr_dtype"}>{dtypes}</tr>);
+        }
+        
+        // unique values per column
+        if(this.props.uniques){
+          let uniques = [<th key={"uq"}>unique values</th>];
+          cols.map((col, i) => {
+            uniques.push(<td key={"uq_"+String(i)}>{this.props.uniques[col]}</td>);
+            return null;
+          });
+          body.push(<tr className="column_info" key={"tr_uq"}>{uniques}</tr>);
+        }
+      }
+
+      // data
       rows.forEach((row, i) => {
-        let row_data = [<th key={-1*(i+1)}>{i}</th>];
+        let row_data = [<th key={"i_"+String(i)}>{i}</th>];
         row.forEach((col, j) => {
-          row_data.push(<td key={(i+1)*10*j}>{col}</td>);
+          row_data.push(<td key={"row_"+String(j)}>{col}</td>);
         })
         body.push(<tr key={i}>{row_data}</tr>);
       })
@@ -34,20 +68,24 @@ export default class DataFrame extends Component {
       </table>;
       return table;
     } catch (error) {
+      // alert("Error making table: " + error);
       return [];
     }
   }
 
   render() {
     var table = null;
+    var show_hide = null;
     if(this.props.cmd === this.props.All){
+      show_hide = <button className="button_blend" onClick={this.show_hide}>show/hide metrics</button>
       table = this.generateDf(this.props.df_cols, this.props.df_rows);
     } else {
       table = this.props.df;
     }
     return (
       <div className="rendered_html">
-        { table }
+        {show_hide}
+        {table}
       </div>
     );
   }
