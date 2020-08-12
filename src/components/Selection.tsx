@@ -1,26 +1,40 @@
 import React, { Component } from "react";
-import LoadedDfs from './LoadedDfs'
+import LoadedDfs from './LoadedDfs';
+import IsetDfObject from '../interfaces/setDf';
+import ISetDf from "../interfaces/setDf";
 
-export default class Selection extends Component {
+interface Props{
+  name: string;
+  names: string[];
+  setDf: (name: string, cmd: string, data: IsetDfObject) => void;
+  fetchDf: (name: string, cmd: string) => void;
+  resetState: () => void;
+  isDataFramePresent: () => boolean;
+  All: string;
+};
 
-  uploadFile = async (e) => {
-    const file = e.target.files[0];
+export default class Selection extends Component<Props> {
+
+  uploadFile = async (e_target: EventTarget) => {
+
+    // @ts-ignore
+    const file: File = e_target.files[0];
     if(this.props.names.includes(file.name)){
       alert("File already uploaded: " + file.name);
       return;
     }
     if (file != null) {
-      const data = new FormData();
+      const data: FormData = new FormData();
       data.append('file_from_react', file);
 
-      let response = await fetch('/upload_csv',
+      let response: Response = await fetch('/upload_csv',
         {
           method: 'post',
           body: data,
         }
       );
 
-      let res = await response.json();
+      let res: ISetDf = await response.json();
       if (res.status !== 1){
         alert('Error uploading file');
       } else {
@@ -30,7 +44,7 @@ export default class Selection extends Component {
     }
   };
 
-  clearCache = () => {
+  clearCache = (): void => {
     fetch('/clear_cache')
     .then(response => response.json())
     .then((data) => {
@@ -52,13 +66,13 @@ export default class Selection extends Component {
 
           <div className="dropdown-content">
               <form>
-                  <input type="file" onChange={this.uploadFile}></input>
+                  <input type="file" onChange={(e) => this.uploadFile(e.target)} accept=".csv"></input>
               </form>
               <button onClick={() => this.props.fetchDf("sample", this.props.All)}>Add Sample DF</button>
           </div>
         </div>
-        <LoadedDfs 
-          initial_name={this.props.names}
+
+        <LoadedDfs
           names={this.props.names}
           fetchDf={this.props.fetchDf}
           isDataFramePresent={this.props.isDataFramePresent}

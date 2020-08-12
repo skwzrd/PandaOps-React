@@ -12,7 +12,7 @@ c = Cache()
 
 All = "All"
 class props(NamedTuple):
-    All = json_load(open('..\\src\\shared_props.json'))[All]
+    All = json_load(open('..\\src\\configs.json'))[All]
 
 app.config.update(
     ALLOWED_FILETYPES={'.csv'},
@@ -67,7 +67,7 @@ def add_metrics(d, df):
     df_duplicate_indicies: pd.Series = df[df_dups==True].index
 
     _d = {
-        'duplicates_bool': any(df_dups),
+        'duplicates': any(df_dups),
         'duplicates_count': len(df_duplicate_indicies),
         'duplicates_index': df_duplicate_indicies.to_list(),
         'length': len(df.index),

@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 
-class Operations extends Component {
+interface Props{
+  isDataFramePresent: () => boolean;
+  operator: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  All: string;
+}
+
+class Operations extends Component<Props> {
   render() {
 
   var operations = null;
