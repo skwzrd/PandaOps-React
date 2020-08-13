@@ -21,7 +21,7 @@ export default class LoadedDfs extends Component<Props>{
     }
     for (let i = 0; i < names.length; i++) {
       const name: string = names[i];
-      content.push(<li key={i} onClick={name => this.getValue}>{name}</li>);
+      content.push(<li key={i} onClick={() => this.getValue(name)}>{name}</li>);
     }
     return content;
   };
