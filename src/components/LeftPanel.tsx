@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
+import IState from '../interfaces/state';
 
-class LeftPanel extends Component {
+interface Props{
+  state: IState;
+}
+
+class LeftPanel extends Component<Props> {
   render() {
-    var info = [];
+    var info: JSX.Element[] = [];
     
     // length
     if(this.props.state.length !== null){
       let rows = []
       rows.push(<div>Rows: {this.props.state.length}</div>);
-      let displayed = "NA";
+      let displayed: string | number = "NA";
       if(this.props.state.cmd === this.props.state.All){
         displayed = this.props.state.fetched_rows;
       }
@@ -20,7 +25,7 @@ class LeftPanel extends Component {
     }
     
     // duplicate rows
-    if(this.props.state.duplicates_bool){
+    if(this.props.state.duplicates){
       let dups = [];
       dups.push(<div>Duplicate Rows</div>);
       dups.push(<div className="indent">{"- Count: "+ String(this.props.state.duplicates_count)}</div>);

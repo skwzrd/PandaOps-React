@@ -30,6 +30,4 @@ resources_old/
 redis_output.txt
 *.rdb
 flask_backend/venv
-*.drawio
-*.xml
 

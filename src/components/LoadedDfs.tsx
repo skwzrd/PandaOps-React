@@ -1,28 +1,34 @@
 import React, { Component } from "react";
 
-export default class LoadedDfs extends Component{
+interface Props{
+  names: string[];
+  fetchDf: (name: string, cmd: string) => void;
+  isDataFramePresent: () => boolean;
+  All: string;
+};
+
+export default class LoadedDfs extends Component<Props>{
   
-  getValue = (e) => {
-    this.props.fetchDf(e.target.innerHTML, this.props.All);
+  getValue = (name: string): void => {
+    this.props.fetchDf(name, this.props.All);
   }
 
 
-  getNames = (names) => {
-    let content = [];
+  getNames = (names: string[]): null | JSX.Element[] => {
+    let content: JSX.Element[] = [];
     if(!this.props.isDataFramePresent()){
       return null;
     }
     for (let i = 0; i < names.length; i++) {
-      const name = names[i];
-      content.push(<li key={i} onClick={this.getValue}>{name}</li>);
+      const name: string = names[i];
+      content.push(<li key={i} onClick={name => this.getValue}>{name}</li>);
     }
     return content;
   };
 
-
   render() {
     var names = this.getNames(this.props.names);
-    var list = null;
+    var list: null | JSX.Element = null;
     if(this.props.isDataFramePresent()){
       list = <div className="dropdown alignleft">
         <div id="select_df_dropdown">
@@ -36,8 +42,6 @@ export default class LoadedDfs extends Component{
         </div>
       </div>
     }
-
-    
     return (
       <div>
         {list}

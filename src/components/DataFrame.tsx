@@ -1,6 +1,21 @@
 import React, { Component } from 'react';
+import IDict from '../interfaces/dict';
 
-export default class DataFrame extends Component {
+interface Props{
+  cmd: string;
+  dtypes: IDict;
+  uniques: IDict;
+  df: string;
+  df_cols: string[];
+  df_rows: string[];
+  All: string;
+}
+
+interface State{
+  showing: boolean;
+}
+
+export default class DataFrame extends Component<Props, State> {
   constructor(props){
     super(props);
     this.state = {
@@ -8,16 +23,16 @@ export default class DataFrame extends Component {
     }
   }
 
-  show_hide = () => {
+  show_hide = (): void => {
     this.setState({ showing: !this.state.showing });
   }
 
   // https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_json.html
   // we can't use df.to_html() if we want to append row chunks together
   // when we can, we will just render the html
-  generateDf = (cols, rows) => {
-    var header = [];
-    var body = [];
+  generateDf = (cols: string[], rows: string[]): JSX.Element | null => {
+    var header: JSX.Element[] = [];
+    var body: JSX.Element[] = [];
     
     try {
       // column names
@@ -29,7 +44,7 @@ export default class DataFrame extends Component {
       if(this.state.showing){
         // dtypes
         if(this.props.dtypes){
-          let dtypes = [<th key={"dtype"}>dtypes</th>];
+          let dtypes: JSX.Element[] = [<th key={"dtype"}>dtypes</th>];
           cols.map((col, i) => {
             dtypes.push(<td key={"dtype_"+String(i)}>{this.props.dtypes[col]}</td>);
             return null;
@@ -39,7 +54,7 @@ export default class DataFrame extends Component {
         
         // unique values per column
         if(this.props.uniques){
-          let uniques = [<th key={"uq"}>unique values</th>];
+          let uniques: JSX.Element[] = [<th key={"uq"}>unique values</th>];
           cols.map((col, i) => {
             uniques.push(<td key={"uq_"+String(i)}>{this.props.uniques[col]}</td>);
             return null;
@@ -50,13 +65,14 @@ export default class DataFrame extends Component {
 
       // data
       rows.forEach((row, i) => {
-        let row_data = [<th key={"i_"+String(i)}>{i}</th>];
+        let row_data: JSX.Element[] = [<th key={"i_"+String(i)}>{i}</th>];
+        //@ts-ignore
         row.forEach((col, j) => {
           row_data.push(<td key={"row_"+String(j)}>{col}</td>);
         })
         body.push(<tr key={i}>{row_data}</tr>);
       })
-      var table = <table>
+      var table: JSX.Element = <table>
         <thead>
           <tr>
             {header}
@@ -68,14 +84,13 @@ export default class DataFrame extends Component {
       </table>;
       return table;
     } catch (error) {
-      // alert("Error making table: " + error);
-      return [];
+      return null;
     }
   }
 
   render() {
-    var table = null;
-    var show_hide = null;
+    var table: null | JSX.Element | string = null;
+    var show_hide: null | JSX.Element = null;
     if(this.props.cmd === this.props.All){
       show_hide = <button className="button_blend" onClick={this.show_hide}>show/hide metrics</button>
       table = this.generateDf(this.props.df_cols, this.props.df_rows);
