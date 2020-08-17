@@ -125,12 +125,12 @@ html, body, #page, #menu_left, #menu_left_content {
     padding-left: 190px;
 }
 
-.column_info {
+.col_metric {
     background-color: #004750 !important;
     font-size: 10.3pt !important;
 }
 
-.column_names {
+.col_name {
     background-color: #003036 !important;
 }
 

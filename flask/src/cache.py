@@ -3,6 +3,9 @@ import pyarrow
 import pandas as pd
 import json
 import subprocess
+import os
+
+import utils
 
 # local redis exe filepath: C:\\Users\Michael\AppData\Local\redis\64bit\redis-server.exe
 # where to download redis for windows: https://github.com/dmajkic/redis/downloads
@@ -14,7 +17,7 @@ class Cache:
     def __init__(self):
         self.r_context = pyarrow.default_serialization_context()
 
-        self.configs = json.load(open('..\\src\\configs.json'))
+        self.configs = json.load(open('..\\..\\src\\configs.json'))
 
         try:
             with open(self.configs['redis_log'], mode='w') as f:
@@ -50,7 +53,6 @@ class Cache:
     def remove_all_dfs(self):
         """Deletes all dfs"""
         for key in self.get_keys():
-            print(f'Deleting df from cache: {key}')
             self.r.delete(key)
 
 
@@ -58,7 +60,6 @@ class Cache:
         """Given a key that exists, deletes specified df and returns True.
             Otherwise returns False"""
         if self.key_exists(key):
-            print(f'Deleting df from cache: {key}')
             self.r.delete(key)
             return True
         return False
@@ -73,13 +74,12 @@ class Cache:
 
     def get_sample_df(self):
         """Returns a sample df, also adds it to storage"""
-        df = pd.DataFrame({
-            'A': 1.,
-            'B': pd.Timestamp('20130102'),
-            'C': pd.Series(1, index=list(range(4)), dtype='float32'),
-            'D': [3] * 4,
-            'E': pd.Categorical(["test", "train", "test", "train"]),
-            'F': 'foo'
-        })
+        df = utils.get_sample_df()
         self.add_df(sample, df)
         return df
+
+
+    def clean_up(self):
+        """Terminates the redis processes"""
+        self.proc.terminate()
+        self.r.close()

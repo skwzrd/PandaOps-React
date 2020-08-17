@@ -3,7 +3,7 @@ from io import BytesIO
 import pandas as pd
 from flask import Flask, jsonify, request
 from cache import Cache
-from json import load as json_load
+import json
 from typing import NamedTuple
 
 app = Flask(__name__)
@@ -12,7 +12,7 @@ c = Cache()
 
 All = "All"
 class props(NamedTuple):
-    All = json_load(open('..\\src\\configs.json'))[All]
+    All = json.load(open('..\\..\\src\\configs.json'))[All]
 
 app.config.update(
     ALLOWED_FILETYPES={'.csv'},
@@ -45,6 +45,7 @@ def get_html_df(df, cmd, lower=0, upper=ROW_CHUNK):
         if cmd == props.All:
             df = date_cols_to_strfmt(df)
             df = df.to_json(orient='split')
+            df = json.loads(df)
         else:
             df = df.to_html()
     return df

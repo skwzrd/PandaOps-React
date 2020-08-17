@@ -4,7 +4,10 @@ export default interface ISetDf{
   status: number;
   name?: string;
 
-  df?: string;
+  df?: {
+    columns: string[];
+    data: any[][];
+  };
   
   fetched_rows?: number;
   length?: number;

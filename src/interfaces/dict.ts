@@ -1,3 +1,3 @@
 export default interface IDict{
-  [key: string]: string;
+  [key: string]: string | number;
 }

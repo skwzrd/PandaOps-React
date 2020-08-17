@@ -8,7 +8,7 @@ export default interface State{
 
   df?: string;
   df_cols?: string[];
-  df_rows?: string[];
+  df_data?: any[][];
 
   count?: number;
   fetched_rows?: number;

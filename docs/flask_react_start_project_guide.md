@@ -5,8 +5,8 @@ Using Windows 10 Command Prompt
 - `npx create-react-app react_flask_app`
 `cd react_flask_app`
 
-- `mkdir flask_backend`
-`cd flask_backend`
+- `mkdir flask`
+`cd flask`
 
 - `py -m venv venv`
 `venv\Scripts\activate`
@@ -15,7 +15,7 @@ Using Windows 10 Command Prompt
 
 - Create a file called **.flaskenv** with lines:
     ```
-    FLASK_APP=server.py 
+    FLASK_APP=./src/server.py 
     FLASK_ENV=development
     ```
 
@@ -24,7 +24,7 @@ Using Windows 10 Command Prompt
         `"proxy": "http://localhost:5000/"`
 
     - Add to scripts:
-        `"start-flask": "cd flask_backend &&  venv\\Scripts\\activate flask run --no-debugger"`
+        `"start-flask": "cd flask &&  venv\\Scripts\\activate flask run --no-debugger"`
 
 - Modify **~/react_flask_app/.gitignore** to include:
     ```
@@ -36,7 +36,7 @@ Using Windows 10 Command Prompt
 If you need to download redis you can get it [here](https://github.com/dmajkic/redis/downloads).
 
 
-- Write your flask code in **~/flask_backend/server.py**
+- Write your flask code in **~/flask/server.py**
 
 - In separete command prompts run:
     `flask run`

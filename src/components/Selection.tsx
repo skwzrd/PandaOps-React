@@ -68,7 +68,7 @@ export default class Selection extends Component<Props> {
               <form>
                   <input type="file" onChange={(e) => this.uploadFile(e.target)} accept=".csv"></input>
               </form>
-              <button onClick={() => this.props.fetchDf("sample", this.props.All)}>Add Sample DF</button>
+              <button id="button_sample_df" onClick={() => this.props.fetchDf("sample", this.props.All)}>Add Sample DF</button>
           </div>
         </div>
 
@@ -79,7 +79,7 @@ export default class Selection extends Component<Props> {
           All={this.props.All}
         />
         
-        <button onClick={this.clearCache} className="button_error alignright">Clear</button>
+        <button onClick={this.clearCache} id="clear" className="button_error alignright">Clear</button>
         <br></br>
         <br></br>
       </div>
