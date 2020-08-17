@@ -29,5 +29,5 @@ resources_old/
 .vscode/
 redis_output.txt
 *.rdb
-flask_backend/venv
+flask/venv
 

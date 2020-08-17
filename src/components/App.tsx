@@ -25,10 +25,10 @@ export default class App extends Component<IProps, IState> {
   get initialState(): IState {
     let _All: string = configs.All;
     return {
-      name: "NA", // df name,
-      df: "No df selected.", //        df.to_html() cmd != this.state.All
-      df_cols: ["No df selected."], // df.to_json() cmd  = this.state.All
-      df_rows: ["No df selected."], // df.to_json() cmd  = this.state.All
+      name: null, // df name,
+      df: null, //        df.to_html() cmd != this.state.All
+      df_cols: null, // df.to_json() cmd  = this.state.All
+      df_data: null, // df.to_json() cmd  = this.state.All
       cmd: _All, // this.state.All, Head, Tail, Stats - basically what kind of df should the server render in html
       fetched_rows: 0, // this.state.All's how many rows have been rendered
       count: 0, // used to avoid fetching the same df state more than once
@@ -47,9 +47,10 @@ export default class App extends Component<IProps, IState> {
   componentDidMount() {
     if(configs.debug === true){
       this.fetchDf("sample", this.state.All);
+      console.log('App debug mounted.');
     }
   }
-  
+
 
   resetState = (): void => {
     this.setState(this.initialState);
@@ -89,17 +90,15 @@ export default class App extends Component<IProps, IState> {
     }
   }
 
-  
 
   setDf = (name: string, cmd: string, data: ISetDf): void => {
     if (data.status === 1) {
       let state: IState = null;
       if((cmd === this.state.All) && (name !== this.state.name)){
-        var df_json = JSON.parse(data.df);
         state = {
           name: name,
-          df_cols: df_json.columns,
-          df_rows: df_json.data,
+          df_cols: data.df.columns,
+          df_data: data.df.data,
           cmd: cmd,
           count: this.state.count + 1,
           duplicates: data.duplicates,
@@ -109,49 +108,53 @@ export default class App extends Component<IProps, IState> {
           length: data.length,
           dtypes: data.dtypes,
           uniques: data.uniques,
-        }
+        };
       } else {
         state = {
           name: name,
           df: ReactHTMLParser(data.df),
           cmd: cmd,
           count: this.state.count + 1,
-        }
+        };
       }
-
+      
       if(state !== null) {
         this.setState(state);
         this.addName(name);
       }
-
+      
     } else {
-      alert("Couldn't acquire dataframe: "+name);
+      console.error("Couldn't acquire dataframe: "+name);
     }
   }
-
+  
   
   stateLoaded = (name: string, cmd: string): boolean => {
     if ((name === this.state.name) &&
-        (cmd === this.state.cmd) &&
-        (this.state.count !== 0))
+    (cmd === this.state.cmd) &&
+    (this.state.count !== 0))
     {
       return true;
     }
     return false;
   }
-
-
+  
+  
   fetchDf = (name: string, cmd: string): void => {
+    let d = null;
     if (this.stateLoaded(name, cmd) === false)
     {
       fetch(`/dataframe?name=${name}&cmd=${cmd}`)
-      .then(response => response.json())
-      .then((data) =>
-      {
-        this.setDf(name, cmd, data);
+      .then(res => res.json())
+      .then((data) => {
+        d = data;
+        this.setDf(name, cmd, d);
+      })
+      .catch((error) => {
+        console.log(error);
       })
     }
-    console.log("Df fetched.");
+    return d;
   }
 
 
@@ -160,12 +163,14 @@ export default class App extends Component<IProps, IState> {
     .then(response => response.json())
     .then((data) =>
     {
-      var df_json = JSON.parse(data.df);
       this.setState({
-        df_rows: this.state.df_rows.concat(df_json.data),
+        df_data: this.state.df_data.concat(data.df.data),
         fetched_rows: this.state.fetched_rows + data.fetched_rows,
       });
     })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   }
 
 
@@ -177,18 +182,13 @@ export default class App extends Component<IProps, IState> {
 
 
   render() {
+
     return (
-      <div>
+      <div id="App">
         <LeftPanel
           state={this.state}
         />
         <div id="main_content">
-          <BottomScrollListener
-            onBottom={this.checkForFetchRows}
-            offset={this.state.scrollOffset}
-            triggerOnNoScroll={false}
-          />
-
           <Selection
             name={this.state.name}
             names={this.state.names}
@@ -211,10 +211,17 @@ export default class App extends Component<IProps, IState> {
             uniques={this.state.uniques}
             df={this.state.df}
             df_cols={this.state.df_cols}
-            df_rows={this.state.df_rows}
+            df_data={this.state.df_data}
             All={this.state.All}
           />
         </div>
+
+        <BottomScrollListener
+          onBottom={this.checkForFetchRows}
+          offset={this.state.scrollOffset}
+          triggerOnNoScroll={false}
+        />
+
       </div>
     );
   }

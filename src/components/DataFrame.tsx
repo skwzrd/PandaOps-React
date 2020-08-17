@@ -7,7 +7,7 @@ interface Props{
   uniques: IDict;
   df: string;
   df_cols: string[];
-  df_rows: string[];
+  df_data: any[][];
   All: string;
 }
 
@@ -30,15 +30,15 @@ export default class DataFrame extends Component<Props, State> {
   // https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_json.html
   // we can't use df.to_html() if we want to append row chunks together
   // when we can, we will just render the html
-  generateDf = (cols: string[], rows: string[]): JSX.Element | null => {
+  generateDf = (cols: string[], rows: any[][]): JSX.Element | null => {
     var header: JSX.Element[] = [];
     var body: JSX.Element[] = [];
     
     try {
       // column names
-      header.push(<th className="column_names" key={"th"}>columns</th>);
+      header.push(<th className="col_name" key={"th"}>columns</th>);
       cols.forEach((col, i) => {
-        header.push(<th className="column_names" key={"th_"+String(i)}>{col}</th>);
+        header.push(<th className="col_name" key={"th_"+String(i)}>{col}</th>);
       });
 
       if(this.state.showing){
@@ -49,7 +49,7 @@ export default class DataFrame extends Component<Props, State> {
             dtypes.push(<td key={"dtype_"+String(i)}>{this.props.dtypes[col]}</td>);
             return null;
           });
-          body.push(<tr className="column_info" key={"tr_dtype"}>{dtypes}</tr>);
+          body.push(<tr className="col_metric" key={"tr_dtype"}>{dtypes}</tr>);
         }
         
         // unique values per column
@@ -59,14 +59,13 @@ export default class DataFrame extends Component<Props, State> {
             uniques.push(<td key={"uq_"+String(i)}>{this.props.uniques[col]}</td>);
             return null;
           });
-          body.push(<tr className="column_info" key={"tr_uq"}>{uniques}</tr>);
+          body.push(<tr className="col_metric" key={"tr_uq"}>{uniques}</tr>);
         }
       }
 
       // data
       rows.forEach((row, i) => {
         let row_data: JSX.Element[] = [<th key={"i_"+String(i)}>{i}</th>];
-        //@ts-ignore
         row.forEach((col, j) => {
           row_data.push(<td key={"row_"+String(j)}>{col}</td>);
         })
@@ -92,15 +91,17 @@ export default class DataFrame extends Component<Props, State> {
     var table: null | JSX.Element | string = null;
     var show_hide: null | JSX.Element = null;
     if(this.props.cmd === this.props.All){
-      show_hide = <button className="button_blend" onClick={this.show_hide}>show/hide metrics</button>
-      table = this.generateDf(this.props.df_cols, this.props.df_rows);
+      show_hide = <button id="show_hide_metrics" className="button_blend" onClick={this.show_hide}>show/hide metrics</button>
+      table = this.generateDf(this.props.df_cols, this.props.df_data);
     } else {
       table = this.props.df;
     }
     return (
-      <div className="rendered_html">
+      <div id="main_display" className="rendered_html">
         {show_hide}
-        {table}
+        <div id="table">
+          {table}
+        </div>
       </div>
     );
   }
