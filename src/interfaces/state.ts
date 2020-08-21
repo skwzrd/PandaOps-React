@@ -7,8 +7,8 @@ export default interface State{
   names?: string[];
 
   df?: string;
-  df_cols?: string[];
-  df_data?: any[][];
+  columns?: string[];
+  data?: any[][];
 
   count?: number;
   fetched_rows?: number;

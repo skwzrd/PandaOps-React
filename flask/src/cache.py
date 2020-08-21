@@ -16,8 +16,8 @@ sample = 'sample'
 class Cache:
     def __init__(self):
         self.r_context = pyarrow.default_serialization_context()
-
-        self.configs = json.load(open('..\\..\\src\\configs.json'))
+        self.configs_path = os.path.abspath(os.path.join(os.path.abspath(__file__), '..\\..\\..\\src\\configs.json'))
+        self.configs = json.load(open(self.configs_path))
 
         try:
             with open(self.configs['redis_log'], mode='w') as f:
