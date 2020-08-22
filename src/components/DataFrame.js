@@ -32,11 +32,10 @@ export default function DataFrame(props) {
   }
   const [class_names, setClassNames] = useState(initialClasses());
   
-  
-    // update the button classes when selecting a different table
-    useEffect(() => {
-      setClassNames(initialClasses());
-    }, [props.name]);
+  // update the button classes when selecting a different table
+  useEffect(() => {
+    setClassNames(initialClasses());
+  }, [props.name, props.names, props.columns]);// eslint-disable-line react-hooks/exhaustive-deps
 
 
   const handleColumnSelection = (e) => {
@@ -74,8 +73,7 @@ export default function DataFrame(props) {
     }
     setNumberColsX(xbtns);
     setNumberColsY(ybtns);
-
-  }, [x, y, class_names, props.dtypes]);
+  }, [x, y, class_names, props.dtypes, props.name]);// eslint-disable-line react-hooks/exhaustive-deps
 
 
   // the main dataframe effect
@@ -101,7 +99,7 @@ export default function DataFrame(props) {
       // cleanup show metric button cus we dont want it when cmd!=="All".
       setShowMetricsButton(null);
     };
-  }, [props.df, y, x, props.columns, show_metrics, props.cmd, props.name, props.data, props.dtypes]);
+  }, [show_metrics, y, x, props.df, props.columns, props.cmd, props.name, props.data, props.dtypes]);// eslint-disable-line react-hooks/exhaustive-deps
 
 
   // dataframe component template
@@ -132,7 +130,7 @@ export default function DataFrame(props) {
       </div>
     );
     setComponentBody(component_body);
-  }, [table, show_plot]);
+  }, [table, show_plot]);// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>

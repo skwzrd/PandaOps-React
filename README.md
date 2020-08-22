@@ -1,5 +1,6 @@
 # Panda Ops 🐼
 
+
 ### Summary 📜
 
 A quick way to view and edit tabular data using the [pandas](https://pandas.pydata.org/) library for Python.
@@ -17,26 +18,34 @@ There are repetitive work flows that exist when dealing with tablular data which
 
 And most importantly, being able to do all these things together seamlessly.
 
+
+### Snapshot ⏲
+
+![Preview](resources/snapshot.gif)
+
+
 ### Latest Update Features 👀
+
+Plotting is now available for columns with float or int dtypes!
+
+![Preview](resources/plotting_feature.PNG)
 
 Column metrics have been removed from the left menu panel and placed within the dataframe table beneath column names.
 
 ![Preview](resources/column_metrics.PNG)
 
 
-### Snapshot ⏲
-
-![Preview](resources/snapshot.gif)
-
 ### Development Setup ✅
 
 See the [getting started guide](docs/flask_react_start_project_guide.md). If you've already set up this project, use `venv\Scripts\activate && flask run` `yarn start`, in separate Command Prompts, to set up both servers.
+
 
 ### Current Design 📰
 
 React manages all the states and resulting views while Flask remains stateless.
 
 ![Design](resources/draw_io_design.png)
+
 
 ### Previous Design 📰
 
