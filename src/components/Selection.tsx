@@ -6,7 +6,7 @@ import ISetDf from "../interfaces/setDf";
 interface Props{
   name: string;
   names: string[];
-  setDf: (name: string, cmd: string, data: IsetDfObject) => void;
+  changeDf: (name: string, cmd: string, data: IsetDfObject) => void;
   fetchDf: (name: string, cmd: string) => void;
   resetState: () => void;
   isDataFramePresent: () => boolean;
@@ -39,7 +39,7 @@ export default class Selection extends Component<Props> {
         alert('Error uploading file');
       } else {
         console.log("File uploaded.");
-        this.props.setDf(res.name, this.props.All, res);
+        this.props.changeDf(res.name, this.props.All, res);
       }
     }
   };
@@ -68,7 +68,7 @@ export default class Selection extends Component<Props> {
               <form>
                   <input type="file" onChange={(e) => this.uploadFile(e.target)} accept=".csv"></input>
               </form>
-              <button id="button_sample_df" onClick={() => this.props.fetchDf("sample", this.props.All)}>Add Sample DF</button>
+              {/* <button id="button_sample_df" onClick={() => this.props.fetchDf("sample", this.props.All)}>Add Sample DF</button> */}
           </div>
         </div>
 

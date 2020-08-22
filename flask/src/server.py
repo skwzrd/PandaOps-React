@@ -11,8 +11,13 @@ app = Flask(__name__)
 c = Cache()
 
 All = "All"
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+configs_path = os.path.abspath(os.path.join(os.path.abspath(__file__), '..\\..\\..\\src\\configs.json'))
+
 class props(NamedTuple):
-    All = json.load(open('..\\..\\src\\configs.json'))[All]
+    
+    All = json.load(open(configs_path))[All]
 
 app.config.update(
     ALLOWED_FILETYPES={'.csv'},

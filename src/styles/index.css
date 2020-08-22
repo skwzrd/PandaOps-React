@@ -121,8 +121,20 @@ html, body, #page, #menu_left, #menu_left_content {
     height: auto;
 }
 
+#plot {
+    margin-top: 16px;
+    max-width: 700px;
+    background-color: rgb(201, 201, 201);
+    border-radius: 5px;
+    
+}
+
 #main_content {
     padding-left: 190px;
+}
+
+#main_display {
+    padding-top: 16px;
 }
 
 .col_metric {
@@ -132,6 +144,10 @@ html, body, #page, #menu_left, #menu_left_content {
 
 .col_name {
     background-color: #003036 !important;
+}
+
+.pad_top {
+    padding-top: 16px;
 }
 
 .rendered_html tr,
@@ -192,6 +208,7 @@ html, body, #page, #menu_left, #menu_left_content {
 .button_success,
 .button_error,
 .button_warning,
+.button_feature,
 .button_secondary,
 .button_blend {
     color: white;
@@ -202,7 +219,7 @@ html, body, #page, #menu_left, #menu_left_content {
 .button_success:hover,
 .button_error:hover,
 .button_warning:hover,
-.button_plain:hover,
+.button_feature:hover,
 .button_secondary:hover,
 .button_blend:hover {
     color: rgb(187, 187, 187);
@@ -214,8 +231,8 @@ html, body, #page, #menu_left, #menu_left_content {
     background: rgb(28, 184, 65);
 }
 
-.button_plain {
-    background: rgb(255, 189, 128);
+.button_feature {
+    background: rgb(104, 60, 175);
 }
 
 .button_error {
@@ -231,6 +248,5 @@ html, body, #page, #menu_left, #menu_left_content {
 }
 
 .button_blend {
-    margin-top: 16px;
     background: rgb(109, 121, 121);
 }
