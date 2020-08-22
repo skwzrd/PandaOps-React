@@ -50,8 +50,8 @@ export default function LeftPanel(props) {
         _info.push(<div className="left_menu_section duplicates">{dups}</div>);
       }
       setInfo(_info.map((element, i) => React.cloneElement(element, { key: i })));
-
-    }, [props.fetched_rows, props.name, props.duplicates, props.duplicates_count, props.duplicates_index, props.cmd]);
+      
+    }, [props.fetched_rows, props.name, props.duplicates, props.duplicates_count, props.duplicates_index, props.cmd]);// eslint-disable-line react-hooks/exhaustive-deps
     
     return (
       <div id="menu_left">

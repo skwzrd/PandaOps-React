@@ -11,43 +11,38 @@ import  { Scatter } from 'react-chartjs-2';
 
 export default function ModalPlot(props) {
   const [plot, setPlot] = useState(null);
-
-  useEffect(() => {
-    createPlot();
-  }, [props.x, props.y, props.columns]);
-
-
+  
   const getDataFromProps = () => {
     let x_index = props.columns.indexOf(props.x);
     let y_index = props.columns.indexOf(props.y);
     let cords = [];
-
+    
     for (let index = 0; index < props.data.length; index++) {
       const row = props.data[index];
       cords.push({x: row[x_index], y: row[y_index]});
     }
-
+    
     // sort the values so the line drawn on the scatter plot
     // only ever intercepts a vertical line one. Ie. not like the
     // scatter plot at https://jerairrest.github.io/react-chartjs-2/
     // sortable: [[x, y], [x,y], ...]
     var sortable = [];
     cords.forEach(item => {
-        sortable.push([item['x'], item['y']]);
+      sortable.push([item['x'], item['y']]);
     });
-
+    
     sortable.sort(function(a, b) {
       return a[0] - b[0];
     });
-
+    
     var cordsSorted = [];
     sortable.forEach(function(item){
-        cordsSorted.push({x: item[0], y: item[1]});
+      cordsSorted.push({x: item[0], y: item[1]});
     });
-
+    
     return cordsSorted;
   }
-
+  
   const createPlot = () => {
     const data = {
       labels: ['Scatter X / Y'],
@@ -93,16 +88,20 @@ export default function ModalPlot(props) {
       },
       AspectRatio: 1
     };
-
-    let plot = <Scatter
-      data={data}
-      width={null}
-      height={null}
-      options={options}
+    
+    let _plot = <Scatter
+    data={data}
+    width={null}
+    height={null}
+    options={options}
     />
-
-    setPlot(plot);
-  }
+    
+    setPlot(_plot);
+  };
+  
+  useEffect(() => {
+    createPlot();
+  }, [props.x, props.y, props.columns]);// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div id="plot">
@@ -110,3 +109,4 @@ export default function ModalPlot(props) {
     </div>
   );
 }
+  
