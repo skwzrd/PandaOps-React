@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import '../styles/index.css';
 import configs from '../configs.json';
@@ -9,7 +9,7 @@ import Operations from './Operations';
 import LeftPanel from './LeftPanel';
 
 import ReactHTMLParser from 'react-html-parser';
-import BottomScrollListener from 'react-bottom-scroll-listener';
+import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 
 
 // State type examples
@@ -94,7 +94,7 @@ export default function App() {
     setDuplicates(null);
     setDuplicatesCount(null);
     setDuplicatesIndex(null);
-    setFetchedRows(0);
+    setFetchedRows(configs.ROW_CHUNK);
     setLength(null);
     setName(null);
     setNames([]);
@@ -204,12 +204,13 @@ export default function App() {
   }
   
   
-  const checkForFetchRows = () => {
-    if((fetched_rows < length) && cmd === All){
+  const checkForFetchRows = useCallback(() => {
+    if((fetched_rows <= length) && cmd === All){
       fetchRows(name, fetched_rows);
     }
-  }
+  }, [fetched_rows, length, cmd, name]);
   
+
   const [df_component, setDfComponent] = useState(null);
   useEffect(() => {
     
@@ -227,7 +228,6 @@ export default function App() {
       
       setDfComponent(_df_component);
     }
-    
   }, [uniques, cmd, df, data, name, names, columns]);// eslint-disable-line react-hooks/exhaustive-deps
   
   
@@ -269,6 +269,9 @@ export default function App() {
 
   }, [uniques, cmd, df, data, name, names]);// eslint-disable-line react-hooks/exhaustive-deps
 
+
+  useBottomScrollListener(checkForFetchRows, scrollOffset);
+
   return (
     <div id="App">
       {left_panel_component}
@@ -280,14 +283,6 @@ export default function App() {
 
         {df_component}
       </div>
-
-      <BottomScrollListener
-        onBottom={checkForFetchRows}
-        offset={scrollOffset}
-        triggerOnNoScroll={false}
-        debounce={200}
-      />
-
     </div>
   );
 }
