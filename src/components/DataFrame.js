@@ -118,6 +118,7 @@ export default function DataFrame(props) {
         </div>
       );
     }
+    
     let component_body = (
       <div>
         <div id="main_display" className="rendered_html">
