@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import ModalPlot from './ModalPlot';
-import {isPlottable, generateDfTable} from './utils'
 
 // Props type examples
 
@@ -102,43 +101,31 @@ export default function DataFrame(props) {
     };
   }, [show_metrics, y, x, props.df, props.columns, props.cmd, props.name, props.data, props.dtypes]);// eslint-disable-line react-hooks/exhaustive-deps
 
-  const createPlot = () => {
-    props.changeDf(props.name, props.All, {status: 1});
-    setShowPlot(!show_plot);
-    setClassNames(initialClasses());
-    setX(null);
-    setY(null);
-  }
 
   // dataframe component template
   const [component_body, setComponentBody] = useState(null);
   useEffect(() => {
-    let plot = null;
-    let cols_y = number_cols_y.map(col_y => <div id="y">{col_y}</div>);
+    let plot_options = null;
     if(show_plot){
-      plot = (
-        <div className="container wrapper">
-            <div className="grid_display">
-              <div>
-                {cols_y}
-              </div>
-              <div className="alignleft">
-                {modal_plot}
-              </div>
-            </div>
-          <div className="center pad_top"><div id="x">{number_cols_x}</div></div>
+      plot_options = (
+        <div>
+          <div className="pad_top">
+            <div id="x">X: {number_cols_x}</div>
+            <br></br>
+            <div id="y">Y: {number_cols_y}</div>
+          </div>
+          {modal_plot}
         </div>
       );
     }
     let component_body = (
-      <div id="main_display" className="rendered_html pad_top">
-        <button className="button_feature" onClick={() => createPlot()}>Plot</button>
-        {plot}
-        <div className="pad_top">
-          {show_metrics_btn}
-        </div>
-        <div id="table">
-          {table}
+      <div>
+        <div id="main_display" className="rendered_html">
+          <button className="button_feature" onClick={() => setShowPlot(!show_plot)}>Plot</button>
+          {plot_options}{show_metrics_btn}
+          <div id="table">
+            {table}
+          </div>
         </div>
       </div>
     );
@@ -150,4 +137,66 @@ export default function DataFrame(props) {
       {component_body}
     </div>
   );
+}
+
+
+function isPlottable(col){
+  if(col.toString().includes('float') ||
+      col.toString().includes('int')){
+    return true;
+  }
+  return false;
+}
+
+
+// https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_json.html
+// we can't use df.to_html() if we want to append row chunks together
+// but when we can, we will just render the html
+const generateDfTable = (cols, rows, dtypes, uniques, show_metrics) => {
+  var header = [];
+  var body = [];
+  
+  // column names
+  header.push(<th className="col_name" key={"th"}>columns</th>);
+  cols.forEach((col, i) => {
+    header.push(<th className="col_name" key={"th_"+String(i)}>{col}</th>);
+  });
+  
+  if(show_metrics){
+    // dtypes
+    let _dtypes = [<th key={"dtype"}>dtypes</th>];
+    cols.map((col, i) => {
+      _dtypes.push(<td key={"dtype_"+String(i)}>{dtypes[col]}</td>);
+      return null;
+    });
+    body.push(<tr className="col_metric" key={"tr_dtype"}>{_dtypes}</tr>);
+    
+    // unique values per column
+    let _uniques = [<th key={"uq"}>unique values</th>];
+    cols.map((col, i) => {
+      _uniques.push(<td key={"uq_"+String(i)}>{uniques[col]}</td>);
+      return null;
+    });
+    body.push(<tr className="col_metric" key={"tr_uq"}>{_uniques}</tr>);
+  }
+
+  // data
+  rows.forEach((row, i) => {
+    let row_data = [<th key={"i_"+String(i)}>{i}</th>];
+    row.forEach((col, j) => {
+      row_data.push(<td key={"row_"+String(j)}>{col}</td>);
+    })
+    body.push(<tr key={i}>{row_data}</tr>);
+  })
+  var table = <table>
+    <thead>
+      <tr>
+        {header}
+      </tr>
+    </thead>
+    <tbody>
+      {body}
+    </tbody>
+  </table>;
+  return table;
 }

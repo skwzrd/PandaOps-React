@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
-
 import LoadedDfs from './LoadedDfs';
-import Operations from './Operations';
-
 
 
 export default function Selection(props) {
@@ -50,7 +47,6 @@ export default function Selection(props) {
   }
 
   const [loadedDfs, setLoadedDfs] = useState(null);
-  const [operator_component, setOperatorComponent] = useState(null);
   useEffect(() => {
     
     let _loadedDfs = <LoadedDfs
@@ -60,35 +56,25 @@ export default function Selection(props) {
       name={props.name}
       names={props.names}
     />
-    
-    let _operator_component = <Operations
-      All={props.All}
-      name={props.name}
-      cmd={props.cmd}
-      isDataFramePresent={props.isDataFramePresent}
-      operator={props.operator}
-    />
     setLoadedDfs(_loadedDfs);
-    setOperatorComponent(_operator_component);
-
-  }, [props.names, props.name, props.cmd]);// eslint-disable-line react-hooks/exhaustive-deps
+    
+  }, [props.names, props.name]);// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="selection_width">
+      <div className="dropdown alignleft">
+        <button className="dropbtn button_warning">Add</button>
 
-      <label for="file_upload" class="custom-file-upload">
-          <i></i>Add
-      </label>
-      <input id="file_upload" type="file" onChange={(e) => uploadFile(e.target)} accept=".csv"></input>
-
-      <div className="inline pad_right">{loadedDfs}</div>
-
-      <div className="inline pad_right">{operator_component}</div>
-      
-      <div className="inline">
-        <button onClick={clearCache} id="clear" className="button_error">Clear</button>
+        <div className="dropdown-content">
+            <form>
+                <input type="file" onChange={(e) => uploadFile(e.target)} accept=".csv"></input>
+            </form>
+        </div>
       </div>
-      
+      {loadedDfs}      
+      <button onClick={clearCache} id="clear" className="button_error alignright">Clear</button>
+      <br></br>
+      <br></br>
     </div>
   );
 }
