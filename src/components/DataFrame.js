@@ -130,6 +130,7 @@ export default function DataFrame(props) {
         </div>
       );
     }
+    
     let component_body = (
       <div id="main_display" className="rendered_html pad_top">
         <button className="button_feature" onClick={() => createPlot()}>Plot</button>
