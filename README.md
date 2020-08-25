@@ -19,16 +19,20 @@ There are repetitive work flows that exist when dealing with tablular data which
 And most importantly, being able to do all these things together seamlessly.
 
 
-### Latest Update Feature 👀
+### Snapshot ⏲
+
+![Preview](resources/snapshot.gif)
+
+
+### Latest Update Features 👀
 
 Plotting is now available for columns with float or int dtypes!
 
 ![Preview](resources/plotting_feature.PNG)
 
+Column metrics have been removed from the left menu panel and placed within the dataframe table beneath column names.
 
-### Demonstration 🎮
-
-![Preview](resources/snapshot.gif)
+![Preview](resources/column_metrics.PNG)
 
 
 ### Development Setup ✅

@@ -86,7 +86,7 @@ export default function ModalPlot(props) {
           }
         }],
       },
-      maintainAspectRatio: true,
+      AspectRatio: 1
     };
     
     let _plot = <Scatter

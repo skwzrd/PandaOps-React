@@ -5,6 +5,7 @@ import configs from '../configs.json';
 
 import Selection from './Selection';
 import DataFrame from './DataFrame';
+import Operations from './Operations';
 import LeftPanel from './LeftPanel';
 
 import ReactHTMLParser from 'react-html-parser';
@@ -207,7 +208,7 @@ export default function App() {
     if((fetched_rows <= length) && cmd === All){
       fetchRows(name, fetched_rows);
     }
-  }, [fetched_rows, length, cmd, name]);// eslint-disable-line react-hooks/exhaustive-deps
+  }, [fetched_rows, length, cmd, name]);
   
 
   const [df_component, setDfComponent] = useState(null);
@@ -216,7 +217,6 @@ export default function App() {
     if(name !== null && columns!==null && dtypes!==null && uniques!==null){
       let _df_component = <DataFrame
         All={All}
-        changeDf={changeDf}
         columns={columns}
         cmd={cmd}
         data={data}
@@ -224,16 +224,16 @@ export default function App() {
         dtypes={dtypes}
         name={name}
         uniques={uniques}
-        />
-        
-        setDfComponent(_df_component);
-      }
-    }, [uniques, cmd, df, data, name, names, columns]);// eslint-disable-line react-hooks/exhaustive-deps
-    
-    
-    const [left_panel_component, setLeftPanelComponent] = useState(null);
-    const [selection_component, setSelectionComponent] = useState(null);
-    
+      />
+      
+      setDfComponent(_df_component);
+    }
+  }, [uniques, cmd, df, data, name, names, columns]);// eslint-disable-line react-hooks/exhaustive-deps
+  
+  
+  const [left_panel_component, setLeftPanelComponent] = useState(null);
+  const [selection_component, setSelectionComponent] = useState(null);
+  const [operator_component, setOperatorComponent] = useState(null);
   useEffect(() => {
     let _left_panel_component = <LeftPanel
       All={All}
@@ -249,17 +249,23 @@ export default function App() {
     let _selection_component = <Selection
       name={name}
       names={names}
-      cmd={cmd}
       changeDf={changeDf}
       fetchDf={fetchDf}
-      operator={operator}
       resetState={resetState}
       isDataFramePresent={isDataFramePresent}
       All={All}
     />
+  
+    let _operator_component = <Operations
+      All={All}
+      name={name}
+      isDataFramePresent={isDataFramePresent}
+      operator={operator}
+    />
 
     setLeftPanelComponent(_left_panel_component);
     setSelectionComponent(_selection_component);
+    setOperatorComponent(_operator_component);
 
   }, [uniques, cmd, df, data, name, names]);// eslint-disable-line react-hooks/exhaustive-deps
 
@@ -268,14 +274,14 @@ export default function App() {
 
   return (
     <div id="App">
-      
       {left_panel_component}
 
       <div id="main_content">
-
         {selection_component}
-        {df_component}
 
+        {operator_component}
+
+        {df_component}
       </div>
     </div>
   );
