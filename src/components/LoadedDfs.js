@@ -24,7 +24,7 @@ export default function LoadedDfs(props) {
   useEffect(() => {
     var names = getNames(props.names);
     if(props.isDataFramePresent()){
-      let _dfs = (<div className="dropdown alignleft">
+      let _dfs = (<div className="dropdown">
         <div id="select_df_dropdown">
           <button id="select_df_button" className="dropbtn button_warning">Select ({names.length})</button>
         </div>
