@@ -55,7 +55,7 @@ export default function LeftPanel(props) {
     
     return (
       <div id="menu_left">
-        <div id="menu_left_content">
+        <div className="container">
             <div className="center med">{props.name}</div>
             <br></br>
             {info}
