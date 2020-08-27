@@ -21,6 +21,11 @@ And most importantly, being able to do all these things together seamlessly.
 
 ### Latest Update Feature 👀
 
+We got a start screen!
+
+![Preview](resources/start_screen.gif)
+
+
 Plotting is now available for columns with float or int dtypes!
 
 ![Preview](resources/plotting_feature.PNG)

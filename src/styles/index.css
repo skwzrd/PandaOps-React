@@ -39,6 +39,24 @@ li {
     align-items: center;
 }
 
+.logo_margin {
+    display: table;
+    margin: 0 auto;
+}
+
+#logo {
+    animation: logo 2s infinite ease-in-out alternate;
+}
+
+@keyframes logo {
+    from {
+        transform: rotateZ(-30deg);
+    }
+    to {
+        transform: rotateZ(30deg);
+    }
+}
+
 .selection_width{
     max-width: 600px;
 }
@@ -47,7 +65,7 @@ input[type="file"] {
     display: none;
 }
 
-.custom-file-upload {
+.add_button {
     display: inline-block;
     padding: 1px 8px 0px 8px;
     cursor: pointer;
@@ -60,7 +78,7 @@ input[type="file"] {
     border-color: #a7a5a3;
 }
 
-.custom-file-upload:hover {
+.add_button:hover {
     color: rgb(187, 187, 187);
 }
 
@@ -194,6 +212,10 @@ html, body, #page, #menu_left, #menu_left_content {
 
 .pad_top {
     padding-top: 16px;
+}
+
+.pad_bottom {
+    padding-bottom: 16px;
 }
 
 .rendered_html tr,

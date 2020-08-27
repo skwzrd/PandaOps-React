@@ -14,8 +14,8 @@ export default function LoadedDfs(props) {
       return null;
     }
     for (let i = 0; i < names.length; i++) {
-      const name = names[i];
-      content.push(<li key={i} onClick={() => getValue(name)}>{name}</li>);
+      const _name = names[i];
+      content.push(<li key={i} onClick={() => getValue(_name)}>{_name}</li>);
     }
     return content;
   };

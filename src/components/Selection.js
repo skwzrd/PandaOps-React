@@ -2,38 +2,10 @@ import React, { useState, useEffect } from "react";
 
 import LoadedDfs from './LoadedDfs';
 import Operations from './Operations';
-
+import AddDf from './AddDf';
 
 
 export default function Selection(props) {
-
-  const uploadFile = async (e_target) => {
-
-    const file = e_target.files[0];
-    if(props.names.includes(file.name)){
-      alert("File already uploaded: " + file.name);
-      return;
-    }
-    if (file != null) {
-      const data = new FormData();
-      data.append('file_from_react', file);
-
-      let response = await fetch('/upload_csv',
-        {
-          method: 'post',
-          body: data,
-        }
-      );
-
-      let res = await response.json();
-      if (res.status !== 1){
-        alert('Error uploading file');
-      } else {
-        console.log("File uploaded.");
-        props.changeDf(res.name, props.All, res);
-      }
-    }
-  };
 
   const clearCache = () => {
     fetch('/clear_cache')
@@ -70,16 +42,17 @@ export default function Selection(props) {
     />
     setLoadedDfs(_loadedDfs);
     setOperatorComponent(_operator_component);
+    
+    }, [props.names, props.name, props.cmd]);// eslint-disable-line react-hooks/exhaustive-deps
+    
+    return (
+      <div className="selection_width">
 
-  }, [props.names, props.name, props.cmd]);// eslint-disable-line react-hooks/exhaustive-deps
-
-  return (
-    <div className="selection_width">
-
-      <label for="file_upload" class="custom-file-upload">
-          <i></i>Add
-      </label>
-      <input id="file_upload" type="file" onChange={(e) => uploadFile(e.target)} accept=".csv"></input>
+      {<AddDf
+        All={props.All}
+        changeDf={props.changeDf}
+        names = {props.names}
+      />}
 
       <div className="inline pad_right">{loadedDfs}</div>
 
