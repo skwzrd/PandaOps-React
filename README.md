@@ -19,7 +19,7 @@ There are repetitive work flows that exist when dealing with tablular data which
 And most importantly, being able to do all these things together seamlessly.
 
 
-### Latest Update Feature 👀
+### Latest Update Features 👀
 
 We got a start screen!
 
