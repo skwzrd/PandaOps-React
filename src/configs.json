@@ -1,7 +1,7 @@
 {
-    "debug": true,
+    "debug": false,
     "redis_log": "redis_output.txt",
     "redis_server_exe_path": "C:\\\\Users\\Michael\\AppData\\Local\\redis\\64bit\\redis-server.exe",
-    "ROW_CHUNK": 10,
+    "ROW_CHUNK": 100,
     "All": "All"
 }

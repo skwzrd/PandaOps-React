@@ -114,7 +114,7 @@ export default function DataFrame(props) {
   const [component_body, setComponentBody] = useState(null);
   useEffect(() => {
     let plot = null;
-    let cols_y = number_cols_y.map(col_y => <div id="y">{col_y}</div>);
+    let cols_y = number_cols_y.map(col_y => <div id="y" key={col_y}>{col_y}</div>);
     if(show_plot){
       plot = (
         <div className="container wrapper">

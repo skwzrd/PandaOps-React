@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import '../styles/index.css';
 import configs from '../configs.json';
@@ -6,6 +6,7 @@ import configs from '../configs.json';
 import Selection from './Selection';
 import DataFrame from './DataFrame';
 import LeftPanel from './LeftPanel';
+import AddDf from './AddDf';
 
 import ReactHTMLParser from 'react-html-parser';
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
@@ -46,7 +47,6 @@ export default function App() {
   const [length, setLength] = useState(null);
   const [name, setName] = useState(null);
   const [names, setNames] = useState([]);
-  const [scrollOffset, setScrollOffset] = useState(50);
   const [uniques, setUniques] = useState(null);
 
   
@@ -67,7 +67,6 @@ export default function App() {
       length: null, // total rows
       name: null, // table name
       names: [], // names of loaded dfs
-      scrollOffset: 100, // bottom scroll listener offset
       uniques: null, // unique value count per column
     };
   }
@@ -79,8 +78,6 @@ export default function App() {
     }
   }, [cleared]);// eslint-disable-line react-hooks/exhaustive-deps
   
-  useEffect(() => {
-  }, [name, cmd]);
   
   const resetState = () => {
     setAll(configs.All);
@@ -97,7 +94,7 @@ export default function App() {
     setLength(null);
     setName(null);
     setNames([]);
-    setScrollOffset(100);
+    // setScrollOffset(100);
     setUniques(null);
     setCleared(!cleared);
   }
@@ -187,27 +184,27 @@ export default function App() {
     }
     return d;
   }
-  
+
+  const updateRows = (_data) => {
+    setData(data.concat(_data.df.data));
+    setFetchedRows(fetched_rows + _data.fetched_rows);
+  }
   
   const fetchRows = (_name, lower) => {
     fetch(`/fetchRows?name=${_name}&lower=${lower}`)
     .then(response => response.json())
-    .then((_data) =>
-    {
-      setData(data.concat(_data.df.data));
-      setFetchedRows(fetched_rows + _data.fetched_rows);
-    })
+    .then((_data) => updateRows(_data))
     .catch((error) => {
       console.error('Error:', error);
     });
   }
-  
-  
-  const checkForFetchRows = useCallback(() => {
-    if((fetched_rows <= length) && cmd === All){
+    
+
+  const checkForFetchRows = () => {
+    if((fetched_rows < length) && cmd === All){
       fetchRows(name, fetched_rows);
     }
-  }, [fetched_rows, length, cmd, name]);// eslint-disable-line react-hooks/exhaustive-deps
+  }
   
 
   const [df_component, setDfComponent] = useState(null);
@@ -244,6 +241,7 @@ export default function App() {
       fetched_rows={fetched_rows}
       length={length}
       name={name}
+      names={names}
     />
   
     let _selection_component = <Selection
@@ -261,22 +259,42 @@ export default function App() {
     setLeftPanelComponent(_left_panel_component);
     setSelectionComponent(_selection_component);
 
-  }, [uniques, cmd, df, data, name, names]);// eslint-disable-line react-hooks/exhaustive-deps
+  }, [df_component]);// eslint-disable-line react-hooks/exhaustive-deps
 
 
-  useBottomScrollListener(checkForFetchRows, scrollOffset);
+  useBottomScrollListener(checkForFetchRows);
+
+
+  const content = () => {
+    if(names.length === 0){
+      let start_screen = 
+      <>
+        <div className="block center">Start by adding a CSV.</div>
+        <AddDf
+          All={All}
+          changeDf={changeDf}
+          names = {names}
+          logo={"logo"}
+        />
+        <div className="block center pad_bottom">Click Me!</div>
+      </>;
+      return start_screen;
+    }
+    else{
+      let work_screen = <>
+        {left_panel_component}
+        <div id="main_content">
+          {selection_component}
+          {df_component}
+        </div>
+      </>;
+      return work_screen;
+    }
+  }
 
   return (
     <div id="App">
-      
-      {left_panel_component}
-
-      <div id="main_content">
-
-        {selection_component}
-        {df_component}
-
-      </div>
+      {content()}
     </div>
   );
 }
