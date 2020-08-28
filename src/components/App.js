@@ -43,11 +43,10 @@ export default function App() {
   const [duplicates, setDuplicates] = useState(null);
   const [duplicates_count, setDuplicatesCount] = useState(null);
   const [duplicates_index, setDuplicatesIndex] = useState(null);
-  const [fetched_rows, setFetchedRows] = useState(configs.ROW_CHUNK);
+  const [fetched_rows, setFetchedRows] = useState(0);
   const [length, setLength] = useState(null);
   const [name, setName] = useState(null);
   const [names, setNames] = useState([]);
-  // const [scrollOffset, setScrollOffset] = useState(50);
   const [uniques, setUniques] = useState(null);
 
   
@@ -68,7 +67,6 @@ export default function App() {
       length: null, // total rows
       name: null, // table name
       names: [], // names of loaded dfs
-      scrollOffset: 100, // bottom scroll listener offset
       uniques: null, // unique value count per column
     };
   }
@@ -243,6 +241,7 @@ export default function App() {
       fetched_rows={fetched_rows}
       length={length}
       name={name}
+      names={names}
     />
   
     let _selection_component = <Selection
@@ -260,7 +259,7 @@ export default function App() {
     setLeftPanelComponent(_left_panel_component);
     setSelectionComponent(_selection_component);
 
-  }, [uniques, cmd, df, data, name, names, fetched_rows]);// eslint-disable-line react-hooks/exhaustive-deps
+  }, [df_component]);// eslint-disable-line react-hooks/exhaustive-deps
 
 
   useBottomScrollListener(checkForFetchRows);
