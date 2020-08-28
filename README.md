@@ -19,18 +19,6 @@ There are repetitive work flows that exist when dealing with tablular data which
 And most importantly, being able to do all these things together seamlessly.
 
 
-### Latest Update Features 👀
-
-We got a start screen!
-
-![Preview](resources/start_screen.gif)
-
-
-Plotting is now available for columns with float or int dtypes!
-
-![Preview](resources/plotting_feature.PNG)
-
-
 ### Demonstration 🎮
 
 ![Preview](resources/snapshot.gif)
