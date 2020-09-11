@@ -1,6 +1,6 @@
 import React from "react";
 
-import logo from '../styles/logo.svg';
+import logo from '../images/logo.svg';
 
 export default function AddDf(props) {
 
@@ -58,4 +58,5 @@ export default function AddDf(props) {
   }
 
   return <>{content()}</>;
+  // return <></>;
 }

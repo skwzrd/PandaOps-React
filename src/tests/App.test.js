@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import App from '../components/App';
+import App from '../containers/App';
 
 import responses from './testdata.json'
 

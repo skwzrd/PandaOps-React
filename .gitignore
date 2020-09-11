@@ -24,10 +24,12 @@ yarn-error.log*
 
 # flask app
 __pycache__/
-*.csv
-resources_old/
+dev_resources/
 .vscode/
+venv/
+
 redis_output.txt
+
 *.rdb
-flask/venv
+*.csv
 

@@ -23,8 +23,6 @@ Using Windows 10 Command Prompt
     - Add to the root level:
         `"proxy": "http://localhost:5000/"`
 
-    - Add to scripts:
-        `"start-flask": "cd flask &&  venv\\Scripts\\activate flask run --no-debugger"`
 
 - Modify **~/react_flask_app/.gitignore** to include:
     ```
@@ -38,9 +36,9 @@ If you need to download redis you can get it [here](https://github.com/dmajkic/r
 
 - Write your flask code in **~/flask/server.py**
 
-- In separete command prompts run:
+- In separate command prompts run:
     `flask run`
 
     `yarn start`
 
-Develop...
+Now you're set!

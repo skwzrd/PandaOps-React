@@ -7,6 +7,7 @@ import Selection from './Selection';
 import DataFrame from './DataFrame';
 import LeftPanel from './LeftPanel';
 import AddDf from './AddDf';
+import Operations from './Ops/index';
 
 import ReactHTMLParser from 'react-html-parser';
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
@@ -294,6 +295,7 @@ export default function App() {
 
   return (
     <div id="App">
+      <Operations />
       {content()}
     </div>
   );

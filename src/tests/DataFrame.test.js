@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 
 import configs from '../configs.json';
 
-import DataFrame from '../components/DataFrame';
+import DataFrame from '../containers/DataFrame';
 
 import responses from './testdata.json'
 
