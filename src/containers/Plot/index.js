@@ -1,6 +1,18 @@
-import React, { useState, useEffect } from 'react';
-
+// external imports
+import React, { memo, useCallback } from 'react';
+import { compose } from 'redux';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import  { Scatter } from 'react-chartjs-2';
+
+
+// styled components to be used in our component
+const Wrapper = styled.div`
+  background-color: rgb(201, 201, 201);
+  border-radius: 5px;
+  max-width: 500px;
+  min-width: 500px;
+`;
 
 // Props type examples
 
@@ -9,22 +21,29 @@ import  { Scatter } from 'react-chartjs-2';
 // x: "A"
 // y: "B"
 
-export default function ModalPlot(props) {
-  const [plot, setPlot] = useState(null);
+// our functional component with deconstructed props
+function ModalPlot({
+  columns,
+  data,
+  x,
+  y
+}) {
   
-  const getDataFromProps = () => {
-    let x_index = props.columns.indexOf(props.x);
-    let y_index = props.columns.indexOf(props.y);
+  // returns an array of sorted {x: , y: } coord objects
+  const getDataFromProps = useCallback(() => {
+    let x_index = columns.indexOf(x);
+    let y_index = columns.indexOf(y);
     let cords = [];
     
-    for (let index = 0; index < props.data.length; index++) {
-      const row = props.data[index];
+    for (let index = 0; index < data.length; index++) {
+      const row = data[index];
       cords.push({x: row[x_index], y: row[y_index]});
     }
     
-    // sort the values so the line drawn on the scatter plot
-    // only ever intercepts a vertical line one. Ie. not like the
+    // sort the values so any given curve drawn on the scatter plot
+    // only ever intercepts a vertical line once. Ie. not like the
     // scatter plot at https://jerairrest.github.io/react-chartjs-2/
+    // which goes in all directions on the x axis
     // sortable: [[x, y], [x,y], ...]
     var sortable = [];
     cords.forEach(item => {
@@ -35,20 +54,20 @@ export default function ModalPlot(props) {
       return a[0] - b[0];
     });
     
-    var cordsSorted = [];
+    var coordsSorted = [];
     sortable.forEach(function(item){
-      cordsSorted.push({x: item[0], y: item[1]});
+      coordsSorted.push({x: item[0], y: item[1]});
     });
     
-    return cordsSorted;
-  }
+    return coordsSorted;
+  }, [columns, data, x, y]);
   
-  const createPlot = () => {
+  const createPlot = useCallback(() => {
     const data = {
       labels: ['Scatter X / Y'],
       datasets: [
         {
-          label: 'x: ' + props.x + ' y: ' + props.y,
+          label: 'x: ' + x + ' y: ' + y,
           fill: false,
           showLine: true,
           lineTension: 0.1,
@@ -76,37 +95,47 @@ export default function ModalPlot(props) {
         yAxes: [{
           scaleLabel: {
             display: true,
-            labelString: props.y
+            labelString: y
           }
         }],
         xAxes: [{
           scaleLabel: {
             display: true,
-            labelString: props.x
+            labelString: x
           }
         }],
       },
       maintainAspectRatio: true,
     };
     
-    let _plot = <Scatter
-    data={data}
-    width={null}
-    height={null}
-    options={options}
+    const plot = <Scatter
+      data={data}
+      width={null}
+      height={null}
+      options={options}
     />
     
-    setPlot(_plot);
-  };
-  
-  useEffect(() => {
-    createPlot();
-  }, [props.x, props.y, props.columns]);// eslint-disable-line react-hooks/exhaustive-deps
+    return plot;
+  }, [columns, x, y]);// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div id="plot">
-      {plot}
-    </div>
+    <Wrapper id="plot">
+      {createPlot()}
+    </Wrapper>
   );
 }
-  
+
+// type checking our given props
+ModalPlot.propTypes = {
+  columns: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.array,
+  x: PropTypes.number,
+  y: PropTypes.string
+};
+
+
+// becomes memo( Operation() )
+export default compose(
+  memo,
+)(ModalPlot);
+

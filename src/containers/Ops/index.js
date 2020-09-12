@@ -56,8 +56,8 @@ export function Operations({
 
 // type checking our given props
 Operations.propTypes = {
-  operation: PropTypes.string,
-  onChangeOperation: PropTypes.func,
+  operation: PropTypes.string.isRequired,
+  onChangeOperation: PropTypes.func.isRequired
 };
 
 // get our state variables from with reselect

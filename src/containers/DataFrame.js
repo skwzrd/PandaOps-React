@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ModalPlot from './ModalPlot';
+import ModalPlot from './Plot/index';
 import {isPlottable, generateDfTable} from './utils'
 
 // Props type examples

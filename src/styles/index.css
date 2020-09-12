@@ -163,13 +163,6 @@ html, body, #page, #menu_left, #menu_left_content {
 }
 
 
-#plot {
-    background-color: rgb(201, 201, 201);
-    border-radius: 5px;
-    max-width: 500px;
-    min-width: 500px;
-}
-
 #main_content {
     padding-left: 190px;
 }
