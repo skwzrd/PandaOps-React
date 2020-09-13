@@ -25,6 +25,8 @@ import {
   CHANGE_CMD,
   CHANGE_NAME,
 } from './constants';
+import configs from '../../configs.json';
+import { initialState } from './reducer';
 
 export const resetState = () => ({
   type: RESET_STATE
@@ -59,3 +61,75 @@ export const updateRows = data => ({
   type: UPDATE_ROWS,
   data
 })
+
+export const changeDf = (name, cmd, data) => dispatch => {
+  if (data.status === 1) {
+    dispatch(changeName(name));
+    dispatch(changeCmd(cmd));
+    dispatch(incrementCount(1));
+
+    if('df' in data){
+      if(cmd === configs.All){
+        dispatch(consumeJsonDf(data));
+      } else {
+        dispatch(consumeHtmlDf(data));
+      }
+    }
+  } else {
+    console.error("Couldn't acquire dataframe: "+name);
+  }
+}
+
+// below functions aren't exactly an action creator
+// just somewhere to access the state
+// and also be accessible in other components
+export const stateLoaded = (_name, _cmd) => (dispatch, getState) => {
+  const {name, cmd, count} = getState().globalState;
+  if ((name === _name) &&
+    (cmd === _cmd) &&
+    (count !== 0))
+  {
+    return true;
+  }
+  return false;
+}
+
+export const isDataFramePresent = (name) => (dispatch) => {
+  if(name!==initialState.name){
+    return true;
+  }
+  return false;
+}
+
+export const fetchDf = (name, cmd) => dispatch => {
+  let d = null;
+  if (dispatch(stateLoaded(name, cmd)) === false)
+  {
+    fetch(`/dataframe?name=${name}&cmd=${cmd}`)
+    .then(res => res.json())
+    .then((data) => {
+      d = data;
+      dispatch(changeDf(name, cmd, d));
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  }
+  return d;
+}
+
+
+export const operator = (e) => (dispatch, getState) => {
+  // All is the default df display and so we will only ever have to
+  // fetchRows() for it. On the otherhand, since we don't store
+  // Stats, Head, or Tail we fetch these each time that it's appropriate.
+  
+  let cmd = e.target.innerHTML;
+  const {name, All} = getState().globalState;
+  
+  if(cmd !== All){
+    dispatch(fetchDf(name, cmd));
+  } else {
+    dispatch(changeDf(name, All, {status: 1}));
+  }
+}

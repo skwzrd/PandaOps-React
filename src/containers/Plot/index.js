@@ -129,7 +129,7 @@ function ModalPlot({
 ModalPlot.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.string),
   data: PropTypes.array,
-  x: PropTypes.number,
+  x: PropTypes.string,
   y: PropTypes.string
 };
 

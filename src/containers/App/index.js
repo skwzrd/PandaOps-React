@@ -17,18 +17,15 @@ import {
   incrementCount,
   resetState,
   updateRows,
+  changeDf,
 } from './actions';
 import '../../styles/index.css';
 import configs from '../../configs.json';
 
-import Selection from '../Selection';
+import Selection from '../ControlPanel';
 import DataFrame from '../DataFrame';
 import LeftPanel from '../LeftPanel';
-import AddDf from '../AddDf';
-import Operations from '../Ops/index';
-
-import { initialState } from './reducer';
-
+import AddDf from '../AddDf/index';
 
 // State type examples
  
@@ -49,11 +46,14 @@ import { initialState } from './reducer';
 // names: ["sample", "sample99.csv"]
 // uniques: {A: 6, B: 0, ...}
 
+
 function App({
   changeCmd,
+  changeDf,
   changeName,
   consumeHtmlDf,
   consumeJsonDf,
+  fetchDf,
   incrementCount,
   resetState,
   updateRows,
@@ -82,78 +82,8 @@ function App({
       console.log('App debug mounted.');
     }
   }, [cleared]);// eslint-disable-line react-hooks/exhaustive-deps
-  
 
-  const isDataFramePresent = () => {
-    if(name!==initialState.name){
-      return true;
-    }
-    return false;
-  }
-  
-  
-  const operator = (e) => {
-    // All is the default df display and so we will only ever have to
-    // fetchRows() for it. On the otherhand, since we don't store
-    // Stats, Head, or Tail we fetch these each time that it's appropriate.
-    
-    let cmd = e.target.innerHTML;
-    
-    if(cmd !== All){
-      fetchDf(name, cmd);
-    } else {
-      changeDf(name, All, {status: 1});
-    }
-  }
-  
-  
-  const changeDf = (_name, _cmd, _data) => {
-    if (_data.status === 1) {
-      changeName(_name);
-      changeCmd(_cmd);
-      incrementCount(1);
 
-      if('df' in _data){
-        if(_cmd===All){
-          consumeJsonDf(_data);
-        } else {
-          consumeHtmlDf(_data);
-        }
-      }
-    } else {
-      console.error("Couldn't acquire dataframe: "+_name);
-    }
-  }
-  
-  
-  const stateLoaded = (_name, _cmd) => {
-    if ((name === _name) &&
-    (cmd === _cmd) &&
-    (count !== 0)){
-      return true;
-    }
-    return false;
-  }
-  
-  
-  const fetchDf = (_name, _cmd) => {
-    let d = null;
-    if (stateLoaded(_name, _cmd) === false)
-    {
-      fetch(`/dataframe?name=${_name}&cmd=${_cmd}`)
-      .then(res => res.json())
-      .then((data) => {
-        d = data;
-        changeDf(_name, _cmd, d);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-    }
-    return d;
-  }
-
-  
   const fetchRows = (_name, lower) => {
     fetch(`/fetchRows?name=${_name}&lower=${lower}`)
     .then(response => response.json())
@@ -181,12 +111,7 @@ function App({
     if(names.length === 0){
       let start_screen = <>
         <div className="block center">Start by adding a CSV.</div>
-        <AddDf
-          All={All}
-          changeDf={changeDf}
-          names = {names}
-          logo={"logo"}
-        />
+        <AddDf logo={"logo"} />
         <div className="block center pad_bottom">Click Me!</div>
       </>;
       return start_screen;
@@ -205,17 +130,7 @@ function App({
           names={names}
         />
         <div id="main_content">
-          <Selection
-            name={name}
-            names={names}
-            cmd={cmd}
-            changeDf={changeDf}
-            fetchDf={fetchDf}
-            operator={operator}
-            resetState={resetState}
-            isDataFramePresent={isDataFramePresent}
-            All={All}
-          />
+          <Selection/>
           <DataFrame
             All={All}
             changeDf={changeDf}
@@ -235,7 +150,6 @@ function App({
 
   return (
     <div id="App">
-      <Operations />
       {content()}
     </div>
   );
@@ -244,6 +158,7 @@ function App({
 // type checking our given props
 App.propTypes = {
   changeCmd: PropTypes.func.isRequired,
+  changeDf: PropTypes.func.isRequired,
   changeName: PropTypes.func.isRequired,
   consumeHtmlDf: PropTypes.func.isRequired,
   consumeJsonDf: PropTypes.func.isRequired,
@@ -295,6 +210,7 @@ const mapStateToProps = state => ({
 // which actions we are going to be using in this component
 const mapDispatchToProps = {
   changeCmd,
+  changeDf,
   changeName,
   consumeHtmlDf,
   consumeJsonDf,
@@ -309,7 +225,7 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-// becomes withConnect( memo( Operation() ) )
+// becomes withConnect( memo( App() ) )
 export default compose(
   withConnect,
   memo,

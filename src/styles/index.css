@@ -57,9 +57,6 @@ li {
     }
 }
 
-.selection_width{
-    max-width: 600px;
-}
 
 input[type="file"] {
     display: none;
@@ -173,9 +170,6 @@ html, body, #page, #menu_left, #menu_left_content {
     grid-gap: 8px;
 }
 
-.inline {
-    display: inline-block;
-}
 
 .test {
     position: relative;
@@ -199,9 +193,6 @@ html, body, #page, #menu_left, #menu_left_content {
     background-color: #003036 !important;
 }
 
-.pad_right {
-    padding-right: 32px;
-}
 
 .pad_top {
     padding-top: 16px;
