@@ -1,10 +1,10 @@
 // external imports
 import React, { memo, useCallback } from 'react';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import  { Scatter } from 'react-chartjs-2';
-
 
 // styled components to be used in our component
 const Wrapper = styled.div`
@@ -16,23 +16,23 @@ const Wrapper = styled.div`
 
 // Props type examples
 
-// columns: [ "A", "B", "C", … ]
 // data: [ (7) [ 0, "2020-01-31", 9, … ], (7) […], (7) […], … ]
-// x: "A"
-// y: "B"
+// columns: [ "A", "B", "C", … ]
+// x_column: "A"
+// y_column: "B"
 
 // our functional component with deconstructed props
-function ModalPlot({
-  columns,
+function Plot({
   data,
-  x,
-  y
+  columns,
+  x_column,
+  y_column,
 }) {
   
   // returns an array of sorted {x: , y: } coord objects
   const getDataFromProps = useCallback(() => {
-    let x_index = columns.indexOf(x);
-    let y_index = columns.indexOf(y);
+    let x_index = columns.indexOf(x_column);
+    let y_index = columns.indexOf(y_column);
     let cords = [];
     
     for (let index = 0; index < data.length; index++) {
@@ -60,14 +60,14 @@ function ModalPlot({
     });
     
     return coordsSorted;
-  }, [columns, data, x, y]);
+  }, [columns, data, x_column, y_column]);
   
   const createPlot = useCallback(() => {
     const data = {
       labels: ['Scatter X / Y'],
       datasets: [
         {
-          label: 'x: ' + x + ' y: ' + y,
+          label: 'x: ' + x_column + ' y: ' + y_column,
           fill: false,
           showLine: true,
           lineTension: 0.1,
@@ -95,13 +95,13 @@ function ModalPlot({
         yAxes: [{
           scaleLabel: {
             display: true,
-            labelString: y
+            labelString: y_column
           }
         }],
         xAxes: [{
           scaleLabel: {
             display: true,
-            labelString: x
+            labelString: x_column
           }
         }],
       },
@@ -116,7 +116,7 @@ function ModalPlot({
     />
     
     return plot;
-  }, [columns, x, y]);// eslint-disable-line react-hooks/exhaustive-deps
+  }, [columns, x_column, y_column]);// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Wrapper id="plot">
@@ -126,16 +126,38 @@ function ModalPlot({
 }
 
 // type checking our given props
-ModalPlot.propTypes = {
+Plot.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.string),
   data: PropTypes.array,
-  x: PropTypes.string,
-  y: PropTypes.string
+  x_column: PropTypes.string,
+  y_column: PropTypes.string
 };
 
 
-// becomes memo( Operation() )
+// get our state variables from with reselect
+// const mapStateToProps = createStructuredSelector({
+//   name: makeSelectName()
+// });
+const mapStateToProps = state => ({
+  data: state.globalState.data,
+  columns: state.globalState.columns,
+  x_column: state.DataFrameState.x_column,
+  y_column: state.DataFrameState.y_column,
+});
+
+// which actions we are going to be using in this component
+const mapDispatchToProps = {
+};
+
+// connects state attributes and actions to the redux store
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+// becomes withConnect( memo( Plot() ) )
 export default compose(
+  withConnect,
   memo,
-)(ModalPlot);
+)(Plot);
 

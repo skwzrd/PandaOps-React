@@ -1,5 +1,5 @@
 /*
- * Operation Actions
+ * App Actions
  *
  * Actions change things in your application
  * Since this boilerplate uses a uni-directional data flow, specifically redux,
@@ -27,6 +27,7 @@ import {
 } from './constants';
 import configs from '../../configs.json';
 import { initialState } from './reducer';
+import { setShowMetricsBtn } from '../DataFrame/actions';
 
 export const resetState = () => ({
   type: RESET_STATE
@@ -129,7 +130,9 @@ export const operator = (e) => (dispatch, getState) => {
   
   if(cmd !== All){
     dispatch(fetchDf(name, cmd));
+    dispatch(setShowMetricsBtn(false));
   } else {
     dispatch(changeDf(name, All, {status: 1}));
+    dispatch(setShowMetricsBtn(true));
   }
 }

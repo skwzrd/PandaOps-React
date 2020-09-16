@@ -23,8 +23,8 @@ import '../../styles/index.css';
 import configs from '../../configs.json';
 
 import Selection from '../ControlPanel';
-import DataFrame from '../DataFrame';
-import LeftPanel from '../LeftPanel';
+import DataFrame from '../DataFrame/index';
+import LeftPanel from '../LeftPanel/index';
 import AddDf from '../AddDf/index';
 
 // State type examples
