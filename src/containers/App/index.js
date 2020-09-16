@@ -1,12 +1,9 @@
 // external imports
 import React, { useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect } from '../../../node_modules/react-redux';
 import { compose } from 'redux';
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
-// import { createStructuredSelector } from 'reselect';
-// import styled from 'styled-components';
-// import { makeSelectName } from './selectors';
 
 // our imports
 import {
@@ -22,10 +19,11 @@ import {
 import '../../styles/index.css';
 import configs from '../../configs.json';
 
-import Selection from '../ControlPanel';
+import SelectionPanel from '../SelectionPanel';
 import DataFrame from '../DataFrame/index';
 import LeftPanel from '../LeftPanel/index';
 import AddDf from '../AddDf/index';
+import Plot from '../Plot/index';
 
 // State type examples
  
@@ -48,21 +46,14 @@ import AddDf from '../AddDf/index';
 
 
 function App({
-  changeCmd,
   changeDf,
-  changeName,
-  consumeHtmlDf,
-  consumeJsonDf,
   fetchDf,
-  incrementCount,
-  resetState,
   updateRows,
 
   All,
   cleared,
   cmd,
   columns,
-  count,
   data,
   df,
   dtypes,
@@ -81,7 +72,7 @@ function App({
       fetchDf("sample", All);
       console.log('App debug mounted.');
     }
-  }, [cleared]);// eslint-disable-line react-hooks/exhaustive-deps
+  }, [cleared]);// eslint-disable-line
 
 
   const fetchRows = (_name, lower) => {
@@ -130,18 +121,21 @@ function App({
           names={names}
         />
         <div id="main_content">
-          <Selection/>
-          <DataFrame
-            All={All}
-            changeDf={changeDf}
-            columns={columns}
-            cmd={cmd}
-            data={data}
-            df={df}
-            dtypes={dtypes}
-            name={name}
-            uniques={uniques}
-          />
+          <SelectionPanel/>
+          <div id="main_display" className="rendered_html pad_top">
+            <Plot/>
+            <DataFrame
+              All={All}
+              changeDf={changeDf}
+              columns={columns}
+              cmd={cmd}
+              data={data}
+              df={df}
+              dtypes={dtypes}
+              name={name}
+              uniques={uniques}
+            />
+          </div>
         </div>
       </>;
       return work_screen;

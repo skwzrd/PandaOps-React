@@ -1,5 +1,5 @@
 /**
- * DataFrame selectors
+ * Plot selectors
  */
 
 import { createSelector } from 'reselect';

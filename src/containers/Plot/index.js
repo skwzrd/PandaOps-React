@@ -1,17 +1,25 @@
 // external imports
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { compose } from 'redux';
-import { connect } from 'react-redux';
+import { connect } from '../../../node_modules/react-redux';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled from '../../../node_modules/styled-components';
 import  { Scatter } from 'react-chartjs-2';
+import  { isPlottable } from '../utils';
+import { changeDf } from '../App/actions';
+import {
+  setXColumn,
+  setYColumn,
+  setShowPlot,
+} from './actions';
 
 // styled components to be used in our component
-const Wrapper = styled.div`
+const PlotWrapper = styled.div`
   background-color: rgb(201, 201, 201);
   border-radius: 5px;
   max-width: 500px;
   min-width: 500px;
+  float: left;
 `;
 
 // Props type examples
@@ -23,10 +31,22 @@ const Wrapper = styled.div`
 
 // our functional component with deconstructed props
 function Plot({
-  data,
+  changeDf,
+  
+  All,
   columns,
+  dtypes,
+  name,
+  
+  setXColumn,
+  setYColumn,
+  setShowPlot,
+
+  data,
+  show_plot,
   x_column,
   y_column,
+
 }) {
   
   // returns an array of sorted {x: , y: } coord objects
@@ -116,21 +136,98 @@ function Plot({
     />
     
     return plot;
-  }, [columns, x_column, y_column]);// eslint-disable-line react-hooks/exhaustive-deps
+  }, [columns, x_column, y_column]);// eslint-disable-line
 
+
+  const handleColumnSelection = useCallback((e) => {
+    let coord = e.target.parentNode.attributes.id.value;
+    let col = e.target.innerHTML;
+    if(coord === "x"){
+      setXColumn(col);
+    }
+    if(coord === "y"){
+      setYColumn(col);
+    }
+  }, [columns, x_column, y_column]);// eslint-disable-line
+
+
+  const createColBtn = (col, coord, i, classNames) => {
+    return <button key={`${coord}${i}`} className={classNames} onClick={(e) => handleColumnSelection(e)}>{col}</button>;
+  }
+
+  // CSS class logic for our x and y column selectors to plot
+  const [colBtns, setColBtns] = useState(null);
+  useEffect(() => {
+    const _colBtns = {x: {}, y: {}};
+    columns.forEach((col, i) => {
+      if(isPlottable(dtypes[col])){
+        let default_class = "button_blend";
+        let selected_class = "button_success";
+
+        let x_class = (col === x_column) ? selected_class : default_class;
+        let y_class = (col === y_column) ? selected_class : default_class;
+
+        _colBtns.x[col] = createColBtn(col, "x", i, x_class);
+        _colBtns.y[col] = createColBtn(col, "y", i, y_class);
+      }
+    });
+    setColBtns(_colBtns);
+  }, [columns, y_column, x_column]);// eslint-disable-line
+
+
+  const showPlot = () => {
+    // changeDf(name, All, {status: 1});
+    setShowPlot(!show_plot);
+  }
+  
+  let plot = null;
+  if(colBtns!==null){
+    let cols_y = Object.keys(colBtns.y).map(col => <div id="y" key={col}>{colBtns.y[col]}</div>);
+    if(show_plot){
+      plot =
+        <div className="container wrapper">
+            <div className="grid_display">
+              <div>
+                {cols_y} 
+              </div>
+              <PlotWrapper>
+                { createPlot() }
+              </PlotWrapper>
+            </div>
+          <div className="center pad_top">
+            <div id="x">
+              {Object.keys(colBtns.x).map(col => colBtns.x[col])}
+            </div>
+          </div>
+        </div>
+    }
+  }
   return (
-    <Wrapper id="plot">
-      {createPlot()}
-    </Wrapper>
+    <>
+      <button className="button_feature" onClick={() => showPlot()}>Plot</button>
+      {plot}
+    </>
   );
 }
 
 // type checking our given props
 Plot.propTypes = {
-  columns: PropTypes.arrayOf(PropTypes.string),
-  data: PropTypes.array,
-  x_column: PropTypes.string,
-  y_column: PropTypes.string
+  changeDf: PropTypes.func.isRequired,
+
+  setXColumn: PropTypes.func.isRequired,
+  setYColumn: PropTypes.func.isRequired,
+  setShowPlot: PropTypes.func.isRequired,
+
+  All: PropTypes.string.isRequired,
+  columns: PropTypes.arrayOf(PropTypes.string).isRequired,
+  data: PropTypes.array.isRequired,
+  dtypes: PropTypes.object.isRequired,
+  x_column: PropTypes.string.isRequired,
+  y_column: PropTypes.string.isRequired,
+
+  show_plot: PropTypes.bool.isRequired,
+  name: PropTypes.string.isRequired,
+  names: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 
@@ -139,14 +236,25 @@ Plot.propTypes = {
 //   name: makeSelectName()
 // });
 const mapStateToProps = state => ({
-  data: state.globalState.data,
+  All: state.globalState.All,
   columns: state.globalState.columns,
-  x_column: state.DataFrameState.x_column,
-  y_column: state.DataFrameState.y_column,
+  data: state.globalState.data,
+  dtypes: state.globalState.dtypes,
+  name: state.globalState.name,
+  names: state.globalState.names,
+
+  show_plot: state.PlotState.show_plot,
+  x_column: state.PlotState.x_column,
+  y_column: state.PlotState.y_column,
+
 });
 
 // which actions we are going to be using in this component
 const mapDispatchToProps = {
+  changeDf,
+  setXColumn,
+  setYColumn,
+  setShowPlot,
 };
 
 // connects state attributes and actions to the redux store

@@ -24,7 +24,7 @@ const Container = styled.div`
   max-width: 600px;
 `;
 
-function Selection({
+function SelectionPanel({
   resetState
 }) {
 
@@ -65,7 +65,7 @@ function Selection({
 
 
 // type checking our given props
-Selection.propTypes = {
+SelectionPanel.propTypes = {
   resetState: PropTypes.func.isRequired
 };
 
@@ -82,8 +82,8 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-// becomes withConnect( memo( Selection() ) )
+// becomes withConnect( memo( SelectionPanel() ) )
 export default compose(
   withConnect,
   memo,
-)(Selection);
+)(SelectionPanel);

@@ -1,5 +1,5 @@
 /*
- * DataFrame Actions
+ * Plot Actions
  *
  * Actions change things in your application
  * Since this boilerplate uses a uni-directional data flow, specifically redux,
@@ -16,16 +16,22 @@
  */
 
 import {
-  SET_SHOW_METRICS,
-  SET_SHOW_METRICS_BTN,
+  SET_SHOW_PLOT,
+  SET_X_COLUMN,
+  SET_Y_COLUMN,
 } from './constants';
 
-export const setShowMetrics = (show) => ({
-  type: SET_SHOW_METRICS,
-  show_metrics: show
+export const setShowPlot = (show) => ({
+  type: SET_SHOW_PLOT,
+  show_plot: show
 });
 
-export const setShowMetricsBtn = (show) => ({
-  type: SET_SHOW_METRICS_BTN,
-  show_metrics_btn: show
+export const setXColumn = (col) => ({
+  type: SET_X_COLUMN,
+  x_column: col
+});
+
+export const setYColumn = (col) => ({
+  type: SET_Y_COLUMN,
+  y_column: col
 });

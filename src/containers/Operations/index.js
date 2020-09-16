@@ -1,9 +1,8 @@
 // external imports
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect } from '../../../node_modules/react-redux';
 import { compose } from 'redux';
-// import styled from 'styled-components';
 
 // our imports
 import {

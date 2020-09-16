@@ -2,9 +2,8 @@ import React, { useState, useEffect, memo } from 'react';
 
 // external imports
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect } from '../../../node_modules/react-redux';
 import { compose } from 'redux';
-import styled from 'styled-components';
 
 // our imports
 import '../../styles/index.css';
@@ -70,7 +69,7 @@ function LeftPanel({
       }
       setInfo(_info.map((element, i) => React.cloneElement(element, { key: i })));
       
-    }, [fetched_rows, name, names, duplicates, duplicates_count, duplicates_index, cmd, data]);// eslint-disable-line react-hooks/exhaustive-deps
+    }, [fetched_rows, name, names, duplicates, duplicates_count, duplicates_index, cmd, data]);// eslint-disable-line
     
     return (
       <div id="menu_left">
