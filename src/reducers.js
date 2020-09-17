@@ -4,7 +4,7 @@ import DataFrameReducer from './containers/DataFrame/reducer';
 import PlotReducer from './containers/Plot/reducer';
 
 export default combineReducers({
-  globalState: appReducer,
+  GlobalState: appReducer,
   DataFrameState: DataFrameReducer,
   PlotState: PlotReducer,
 });

@@ -21,7 +21,7 @@ const selectGlobalState = state => state || initialState;
 const makeSelectData = () =>
   createSelector(
     selectGlobalState,
-    globalState => globalState.data,
+    GlobalState => GlobalState.data,
   );
 
 export { selectGlobalState, makeSelectData };

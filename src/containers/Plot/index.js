@@ -6,12 +6,15 @@ import PropTypes from 'prop-types';
 import styled from '../../../node_modules/styled-components';
 import  { Scatter } from 'react-chartjs-2';
 import  { isPlottable } from '../utils';
-import { changeDf, loadAllData } from '../App/actions';
+import { changeDf, fetchRows } from '../App/actions';
 import {
   setXColumn,
   setYColumn,
   setShowPlot,
 } from './actions';
+
+import ClipLoader from "react-spinners/ClipLoader";
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 
 // styled components to be used in our component
 const PlotWrapper = styled.div`
@@ -32,13 +35,14 @@ const PlotWrapper = styled.div`
 // our functional component with deconstructed props
 function Plot({
   changeDf,
-  loadAllData,
+  fetchRows,
   
   All,
   all_rows_loaded,
   columns,
   dtypes,
   name,
+  fetched_rows,
   
   setXColumn,
   setYColumn,
@@ -138,7 +142,7 @@ function Plot({
     />
     
     return plot;
-  }, [columns, x_column, y_column]);// eslint-disable-line
+  }, [columns, x_column, y_column, data]);// eslint-disable-line
 
 
   const handleColumnSelection = useCallback((e) => {
@@ -178,17 +182,26 @@ function Plot({
 
 
   const showPlot = () => {
-    // changeDf(name, All, {status: 1});
     setShowPlot(!show_plot);
   }
 
-  const getMessages = () => {
+  const { promiseInProgress } = usePromiseTracker();
+  const getLoadingMessages = () => {
     let message = null;
     if(all_rows_loaded === false){
+      let is_not_loading =  <>
+        <div>Not plotting all data!</div>
+        <button className="button_error block center pad-t-b" onClick={() => trackPromise(fetchRows(name, fetched_rows, true))}>Load all data</button>
+      </>;
+
+      let is_loading = <>
+        <div>Fetching data ...</div>
+        <div className="pad-t-b"><ClipLoader color={"#e67a1c"}/></div>
+      </>;
+
       message =
       <div className="block center">
-        Not plotting all data!
-        <button className="button_error block center pad-t-b" onClick={loadAllData}>Load all data</button>
+        {(promiseInProgress === true) ? is_loading : is_not_loading}
       </div>
     }
     return message;
@@ -201,7 +214,7 @@ function Plot({
     if(show_plot){
       plot =
         <div className="container wrapper">
-          { getMessages() }
+          { getLoadingMessages() }
           <div className="grid_display">
             <div>
               {cols_y} 
@@ -229,13 +242,14 @@ function Plot({
 // type checking our given props
 Plot.propTypes = {
   changeDf: PropTypes.func.isRequired,
-  loadAllData: PropTypes.func.isRequired,
+  fetchRows: PropTypes.func.isRequired,
 
   setXColumn: PropTypes.func.isRequired,
   setYColumn: PropTypes.func.isRequired,
   setShowPlot: PropTypes.func.isRequired,
 
   All: PropTypes.string.isRequired,
+  fetched_rows: PropTypes.number.isRequired,
   columns: PropTypes.arrayOf(PropTypes.string).isRequired,
   data: PropTypes.array.isRequired,
   dtypes: PropTypes.object.isRequired,
@@ -244,7 +258,6 @@ Plot.propTypes = {
 
   show_plot: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
-  names: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 
@@ -253,12 +266,13 @@ Plot.propTypes = {
 //   name: makeSelectName()
 // });
 const mapStateToProps = state => ({
-  All: state.globalState.All,
-  columns: state.globalState.columns,
-  data: state.globalState.data,
-  dtypes: state.globalState.dtypes,
-  name: state.globalState.name,
-  all_rows_loaded: state.globalState.all_rows_loaded,
+  All: state.GlobalState.All,
+  columns: state.GlobalState.columns,
+  data: state.GlobalState.data,
+  dtypes: state.GlobalState.dtypes,
+  fetched_rows: state.GlobalState.fetched_rows,
+  name: state.GlobalState.name,
+  all_rows_loaded: state.GlobalState.all_rows_loaded,
 
   show_plot: state.PlotState.show_plot,
   x_column: state.PlotState.x_column,
@@ -269,7 +283,7 @@ const mapStateToProps = state => ({
 // which actions we are going to be using in this component
 const mapDispatchToProps = {
   changeDf,
-  loadAllData,
+  fetchRows,
   setXColumn,
   setYColumn,
   setShowPlot,

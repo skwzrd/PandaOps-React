@@ -18,6 +18,7 @@ import {
   CONSUME_HTML_DF,
   CONSUME_JSON_DF,
   UPDATE_ROWS,
+  SHOW_MORE_TABLE_ROWS,
 
   CHANGE_CMD,
   CHANGE_NAME,
@@ -64,6 +65,7 @@ export const initialState = {
   length: -1, // total rows
   name: '', // table name
   names: [], // names of loaded dfs
+  table_rows_displayed: configs.ROW_CHUNK,
   uniques: {}  // unique value count per column
 };
 
@@ -110,7 +112,11 @@ const appReducer = (state = initialState, action) =>
       case UPDATE_ROWS:
         draft.data = draft.data.concat(action.data.df.data);
         draft.fetched_rows = draft.data.length;
+        draft.table_rows_displayed = action.scrollFetch ? draft.data.length : state.table_rows_displayed;
         break;
+
+      case SHOW_MORE_TABLE_ROWS:
+        draft.table_rows_displayed += configs.ROW_CHUNK;
     }
   });
 

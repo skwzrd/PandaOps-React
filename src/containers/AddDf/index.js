@@ -85,8 +85,8 @@ AddDf.propTypes = {
 //   name: makeSelectName()
 // });
 const mapStateToProps = state => ({
-  All: state.globalState.All,
-  names: state.globalState.names,
+  All: state.GlobalState.All,
+  names: state.GlobalState.names,
 });
 
 // which actions we are going to be using in this component

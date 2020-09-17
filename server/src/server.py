@@ -133,13 +133,15 @@ def fetch_rows():
 
     name = request.args.get('name')
     lower = int(request.args.get('lower'))
-    load_all_rows = bool(request.args.get('all'))
+    load_all_rows = False
+    if request.args.get('all') == 'true':
+        load_all_rows = True
 
     d = {}
     d['status'] = 0
     df = c.get_df(name)
 
-    upper = len(df.index) if load_all_rows else ROW_CHUNK
+    upper = len(df.index) if load_all_rows else lower + ROW_CHUNK
 
     if isinstance(df, pd.DataFrame):
         d['name'] = name

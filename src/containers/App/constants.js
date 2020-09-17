@@ -14,6 +14,7 @@ export const CONSUME_HTML_DF = 'pandaOps/App/CONSUME_HTML_DF';
 export const CONSUME_JSON_DF = 'pandaOps/App/CONSUME_JSON_DF';
 export const INCREMENT_COUNT = 'pandaOps/App/INCREMENT_COUNT';
 export const UPDATE_ROWS = 'pandaOps/App/UPDATE_ROWS';
+export const SHOW_MORE_TABLE_ROWS = 'pandaOps/App/SHOW_MORE_TABLE_ROWS';
 
 export const CHANGE_NAME = 'pandaOps/App/CHANGE_NAME';
 export const CHANGE_CMD = 'pandaOps/App/CHANGE_CMD';
