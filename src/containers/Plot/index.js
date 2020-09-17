@@ -185,7 +185,7 @@ function Plot({
     setShowPlot(!show_plot);
   }
 
-  const { promiseInProgress } = usePromiseTracker();
+  const { promiseInProgress } = usePromiseTracker({delay: 500});
   const getLoadingMessages = () => {
     let message = null;
     if(all_rows_loaded === false){

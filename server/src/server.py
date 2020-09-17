@@ -135,6 +135,8 @@ def fetch_rows():
     lower = int(request.args.get('lower'))
     load_all_rows = False
     if request.args.get('all') == 'true':
+        import time
+        time.sleep(2) # for viewing purposes only
         load_all_rows = True
 
     d = {}

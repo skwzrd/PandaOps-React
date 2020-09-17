@@ -32,6 +32,7 @@ function LeftPanel({
   data,
   length,
   fetched_rows,
+  table_rows_displayed,
   name,
   names,
   duplicates,
@@ -47,11 +48,12 @@ function LeftPanel({
       if(length !== null){
         let rows = []
         rows.push(<div>Rows: {length}</div>);
-        let displayed = "NA";
+        let _table_rows_displayed = "NA";
         if(cmd === All){
-          displayed = fetched_rows;
+          _table_rows_displayed = table_rows_displayed;
         }
-        rows.push(<div>Displayed: {displayed}</div>);
+        rows.push(<div>In Plot: {fetched_rows}</div>);
+        rows.push(<div>In Table: {_table_rows_displayed}</div>);
         rows = rows.map((element, i) => React.cloneElement(element, { key: i }));
   
         _info.push(<div className="left_menu_section rows">{rows}</div>);
@@ -69,7 +71,7 @@ function LeftPanel({
       }
       setInfo(_info.map((element, i) => React.cloneElement(element, { key: i })));
       
-    }, [fetched_rows, name, names, duplicates, duplicates_count, duplicates_index, cmd, data]);// eslint-disable-line
+    }, [fetched_rows, name, names, duplicates, duplicates_count, duplicates_index, cmd, data, table_rows_displayed]);// eslint-disable-line
     
     return (
       <div id="menu_left">
@@ -91,6 +93,7 @@ LeftPanel.propTypes = {
   duplicates_count: PropTypes.number.isRequired,
   duplicates_index: PropTypes.arrayOf(PropTypes.number).isRequired,
   fetched_rows: PropTypes.number.isRequired,
+  table_rows_displayed: PropTypes.number.isRequired,
   length: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   names: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -108,6 +111,7 @@ const mapStateToProps = state => ({
   duplicates_count: state.GlobalState.duplicates_count,
   duplicates_index: state.GlobalState.duplicates_index,
   fetched_rows: state.GlobalState.fetched_rows,
+  table_rows_displayed: state.GlobalState.table_rows_displayed,
   length: state.GlobalState.length,
   name: state.GlobalState.name,
   names: state.GlobalState.names,
