@@ -21,6 +21,7 @@ import {
   CONSUME_JSON_DF,
   INCREMENT_COUNT,
   UPDATE_ROWS,
+  SHOW_MORE_TABLE_ROWS,
 
   CHANGE_CMD,
   CHANGE_NAME,
@@ -64,9 +65,14 @@ export const consumeJsonDf = data => ({
   data
 })
 
-export const updateRows = data => ({
+export const updateRows = (data, scrollFetch) => ({
   type: UPDATE_ROWS,
-  data
+  data,
+  scrollFetch,
+})
+
+export const showMoreTableRows = () => ({
+  type: SHOW_MORE_TABLE_ROWS
 })
 
 export const changeDf = (name, cmd, data) => dispatch => {
@@ -91,7 +97,7 @@ export const changeDf = (name, cmd, data) => dispatch => {
 // just somewhere to access the state
 // and also be accessible in other components
 export const stateLoaded = (_name, _cmd) => (dispatch, getState) => {
-  const {name, cmd, count} = getState().globalState;
+  const {name, cmd, count} = getState().GlobalState;
   if ((name === _name) &&
     (cmd === _cmd) &&
     (count !== 0))
@@ -125,22 +131,15 @@ export const fetchDf = (name, cmd) => dispatch => {
   return d;
 }
 
-
-export const fetchRows = (name, lower, all=false) => (dispatch) => {  
-  fetch(`/fetchRows?name=${name}&lower=${lower}&all=${all}`)
+export const fetchRows = (name, lower, all=false, scrollFetch=false) => (dispatch) => {  
+  return fetch(`/fetchRows?name=${name}&lower=${lower}&all=${all}`)
   .then(response => response.json())
-  .then((data) => dispatch(updateRows(data)))
+  .then((data) => dispatch(updateRows(data, scrollFetch)))
   .catch((error) => {
     console.error('Error:', error);
   });
 }
 
-export const loadAllData = () => (dispatch, getState) => {
-  const {name, fetched_rows, all_rows_loaded} = getState().globalState;
-  if(all_rows_loaded === false){
-    dispatch(fetchRows(name, fetched_rows, true));
-  }
-}
 
 
 export const operator = (e) => (dispatch, getState) => {
@@ -149,7 +148,7 @@ export const operator = (e) => (dispatch, getState) => {
   // Stats, Head, or Tail we fetch these each time that it's appropriate.
   
   let cmd = e.target.innerHTML;
-  const {name, All} = getState().globalState;
+  const {name, All} = getState().GlobalState;
   
   if(cmd !== All){
     dispatch(fetchDf(name, cmd));

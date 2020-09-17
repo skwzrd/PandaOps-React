@@ -31,6 +31,7 @@ function DataFrame({
   data,
   df,
   dtypes,
+  table_rows_displayed,
   uniques,
 
   setShowMetrics,
@@ -42,7 +43,7 @@ function DataFrame({
 
   const getDfTable = () => {
     if(cmd === All){
-      return generateDfTable(columns, data, dtypes, uniques, show_metrics);
+      return generateDfTable(columns, data.slice(0, table_rows_displayed), dtypes, uniques, show_metrics);
     }
     return df;
   }
@@ -70,6 +71,7 @@ DataFrame.propTypes = {
   data: PropTypes.arrayOf(PropTypes.any).isRequired,
   df: PropTypes.arrayOf(PropTypes.object).isRequired,
   dtypes: PropTypes.object.isRequired,
+  table_rows_displayed: PropTypes.number.isRequired,
   uniques: PropTypes.object.isRequired,
 
   show_metrics: PropTypes.bool.isRequired,
@@ -81,13 +83,14 @@ DataFrame.propTypes = {
 //   name: makeSelectName()
 // });
 const mapStateToProps = state => ({
-  All: state.globalState.All,
-  cmd: state.globalState.cmd,
-  columns: state.globalState.columns,
-  data: state.globalState.data,
-  df: state.globalState.df,
-  dtypes: state.globalState.dtypes,
-  uniques: state.globalState.uniques,
+  All: state.GlobalState.All,
+  cmd: state.GlobalState.cmd,
+  columns: state.GlobalState.columns,
+  data: state.GlobalState.data,
+  df: state.GlobalState.df,
+  dtypes: state.GlobalState.dtypes,
+  table_rows_displayed: state.GlobalState.table_rows_displayed,
+  uniques: state.GlobalState.uniques,
   
   show_metrics: state.DataFrameState.show_metrics,
   show_metrics_btn: state.DataFrameState.show_metrics_btn,

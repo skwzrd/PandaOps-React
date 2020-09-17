@@ -68,9 +68,9 @@ LoadedDfs.propTypes = {
 
 // get our state variables from with reselect
 const mapStateToProps = state => ({
-  All: state.globalState.All,
-  name: state.globalState.name,
-  names: state.globalState.names,
+  All: state.GlobalState.All,
+  name: state.GlobalState.name,
+  names: state.GlobalState.names,
 });
 
 // which actions we are going to be using in this component

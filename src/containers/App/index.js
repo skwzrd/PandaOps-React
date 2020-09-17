@@ -10,15 +10,16 @@ import {
   changeAllRowsLoaded,
   fetchDf,
   fetchRows,
+  showMoreTableRows,
 } from './actions';
 import '../../styles/index.css';
 import configs from '../../configs.json';
 
-import SelectionPanel from '../SelectionPanel';
 import DataFrame from '../DataFrame/index';
 import LeftPanel from '../LeftPanel/index';
 import AddDf from '../AddDf/index';
 import Plot from '../Plot/index';
+import SelectionPanel from '../SelectionPanel';
 
 // State type examples
  
@@ -44,11 +45,13 @@ function App({
   changeAllRowsLoaded,
   fetchDf,
   fetchRows,
+  showMoreTableRows,
 
   All,
   cleared,
   cmd,
   fetched_rows,
+  table_rows_displayed,
   length,
   name,
   names,
@@ -68,7 +71,10 @@ function App({
   
   const checkForFetchRows = () => {
     if((fetched_rows < length) && cmd === All){
-      fetchRows(name, fetched_rows);
+      fetchRows(name, fetched_rows, false, true);
+    }
+    else if((table_rows_displayed < length) && cmd === All){
+      showMoreTableRows();
     }
   }
 
@@ -115,6 +121,7 @@ App.propTypes = {
   changeAllRowsLoaded: PropTypes.func.isRequired,
   fetchDf: PropTypes.func.isRequired,
   fetchRows: PropTypes.func.isRequired,
+  showMoreTableRows: PropTypes.func.isRequired,
 
   All: PropTypes.string.isRequired,
   all_rows_loaded: PropTypes.bool.isRequired,
@@ -132,6 +139,7 @@ App.propTypes = {
   length: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   names: PropTypes.arrayOf(PropTypes.string).isRequired,
+  table_rows_displayed: PropTypes.number.isRequired,
   uniques: PropTypes.object.isRequired
 };
 
@@ -140,23 +148,24 @@ App.propTypes = {
 //   name: makeSelectName()
 // });
 const mapStateToProps = state => ({
-  All: state.globalState.All,
-  all_rows_loaded: state.globalState.all_rows_loaded,
-  cleared: state.globalState.cleared,
-  cmd: state.globalState.cmd,
-  columns: state.globalState.columns,
-  count: state.globalState.count,
-  data: state.globalState.data,
-  df: state.globalState.df,
-  dtypes: state.globalState.dtypes,
-  duplicates: state.globalState.duplicates,
-  duplicates_count: state.globalState.duplicates_count,
-  duplicates_index: state.globalState.duplicates_index,
-  fetched_rows: state.globalState.fetched_rows,
-  length: state.globalState.length,
-  name: state.globalState.name,
-  names: state.globalState.names,
-  uniques: state.globalState.uniques
+  All: state.GlobalState.All,
+  all_rows_loaded: state.GlobalState.all_rows_loaded,
+  cleared: state.GlobalState.cleared,
+  cmd: state.GlobalState.cmd,
+  columns: state.GlobalState.columns,
+  count: state.GlobalState.count,
+  data: state.GlobalState.data,
+  df: state.GlobalState.df,
+  dtypes: state.GlobalState.dtypes,
+  duplicates: state.GlobalState.duplicates,
+  duplicates_count: state.GlobalState.duplicates_count,
+  duplicates_index: state.GlobalState.duplicates_index,
+  fetched_rows: state.GlobalState.fetched_rows,
+  length: state.GlobalState.length,
+  name: state.GlobalState.name,
+  names: state.GlobalState.names,
+  table_rows_displayed: state.GlobalState.table_rows_displayed,
+  uniques: state.GlobalState.uniques
 });
 
 // which actions we are going to be using in this component
@@ -164,6 +173,7 @@ const mapDispatchToProps = {
   changeAllRowsLoaded,
   fetchDf,
   fetchRows,
+  showMoreTableRows,
 };
 
 // connects state attributes and actions to the redux store

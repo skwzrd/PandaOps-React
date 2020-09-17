@@ -102,16 +102,16 @@ LeftPanel.propTypes = {
 //   name: makeSelectName()
 // });
 const mapStateToProps = state => ({
-  All: state.globalState.All,
-  cmd: state.globalState.cmd,
-  duplicates: state.globalState.duplicates,
-  duplicates_count: state.globalState.duplicates_count,
-  duplicates_index: state.globalState.duplicates_index,
-  fetched_rows: state.globalState.fetched_rows,
-  length: state.globalState.length,
-  name: state.globalState.name,
-  names: state.globalState.names,
-  uniques: state.globalState.uniques
+  All: state.GlobalState.All,
+  cmd: state.GlobalState.cmd,
+  duplicates: state.GlobalState.duplicates,
+  duplicates_count: state.GlobalState.duplicates_count,
+  duplicates_index: state.GlobalState.duplicates_index,
+  fetched_rows: state.GlobalState.fetched_rows,
+  length: state.GlobalState.length,
+  name: state.GlobalState.name,
+  names: state.GlobalState.names,
+  uniques: state.GlobalState.uniques
 });
 
 // which actions we are going to be using in this component

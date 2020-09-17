@@ -56,8 +56,8 @@ Operations.propTypes = {
 //   name: makeSelectName()
 // });
 const mapStateToProps = state => ({
-  All: state.globalState.All,
-  cmd: state.globalState.cmd,
+  All: state.GlobalState.All,
+  cmd: state.GlobalState.cmd,
 });
 
 // which actions we are going to be using in this component
