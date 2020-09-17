@@ -17,4 +17,5 @@ export const UPDATE_ROWS = 'pandaOps/App/UPDATE_ROWS';
 
 export const CHANGE_NAME = 'pandaOps/App/CHANGE_NAME';
 export const CHANGE_CMD = 'pandaOps/App/CHANGE_CMD';
+export const CHANGE_ALL_ROWS_LOADED = 'pandaOps/App/CHANGE_ALL_ROWS_LOADED';
 

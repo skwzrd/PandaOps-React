@@ -7,14 +7,9 @@ import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 
 // our imports
 import {
-  changeCmd,
-  changeName,
-  consumeHtmlDf,
-  consumeJsonDf,
-  incrementCount,
-  resetState,
-  updateRows,
-  changeDf,
+  changeAllRowsLoaded,
+  fetchDf,
+  fetchRows,
 } from './actions';
 import '../../styles/index.css';
 import configs from '../../configs.json';
@@ -46,25 +41,17 @@ import Plot from '../Plot/index';
 
 
 function App({
-  changeDf,
+  changeAllRowsLoaded,
   fetchDf,
-  updateRows,
+  fetchRows,
 
   All,
   cleared,
   cmd,
-  columns,
-  data,
-  df,
-  dtypes,
-  duplicates,
-  duplicates_count,
-  duplicates_index,
   fetched_rows,
   length,
   name,
   names,
-  uniques
 }) {
   
   useEffect(() => {
@@ -74,17 +61,11 @@ function App({
     }
   }, [cleared]);// eslint-disable-line
 
+  useEffect(() => {
+    fetched_rows === length ? changeAllRowsLoaded(true) : changeAllRowsLoaded(false);
+  }, [fetched_rows, length]);// eslint-disable-line
 
-  const fetchRows = (_name, lower) => {
-    fetch(`/fetchRows?name=${_name}&lower=${lower}`)
-    .then(response => response.json())
-    .then((_data) => updateRows(_data))
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-  }
-    
-
+  
   const checkForFetchRows = () => {
     if((fetched_rows < length) && cmd === All){
       fetchRows(name, fetched_rows);
@@ -109,32 +90,12 @@ function App({
     }
     else{
       let work_screen = <>
-        <LeftPanel
-          All={All}
-          cmd={cmd}
-          duplicates={duplicates}
-          duplicates_count={duplicates_count}
-          duplicates_index={duplicates_index}
-          fetched_rows={fetched_rows}
-          length={length}
-          name={name}
-          names={names}
-        />
+        <LeftPanel/>
         <div id="main_content">
           <SelectionPanel/>
           <div id="main_display" className="rendered_html pad_top">
             <Plot/>
-            <DataFrame
-              All={All}
-              changeDf={changeDf}
-              columns={columns}
-              cmd={cmd}
-              data={data}
-              df={df}
-              dtypes={dtypes}
-              name={name}
-              uniques={uniques}
-            />
+            <DataFrame/>
           </div>
         </div>
       </>;
@@ -151,16 +112,12 @@ function App({
 
 // type checking our given props
 App.propTypes = {
-  changeCmd: PropTypes.func.isRequired,
-  changeDf: PropTypes.func.isRequired,
-  changeName: PropTypes.func.isRequired,
-  consumeHtmlDf: PropTypes.func.isRequired,
-  consumeJsonDf: PropTypes.func.isRequired,
-  incrementCount: PropTypes.func.isRequired,
-  resetState: PropTypes.func.isRequired,
-  updateRows: PropTypes.func.isRequired,
+  changeAllRowsLoaded: PropTypes.func.isRequired,
+  fetchDf: PropTypes.func.isRequired,
+  fetchRows: PropTypes.func.isRequired,
 
   All: PropTypes.string.isRequired,
+  all_rows_loaded: PropTypes.bool.isRequired,
   cleared: PropTypes.bool.isRequired,
   cmd: PropTypes.string.isRequired,
   columns: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -184,6 +141,7 @@ App.propTypes = {
 // });
 const mapStateToProps = state => ({
   All: state.globalState.All,
+  all_rows_loaded: state.globalState.all_rows_loaded,
   cleared: state.globalState.cleared,
   cmd: state.globalState.cmd,
   columns: state.globalState.columns,
@@ -203,14 +161,9 @@ const mapStateToProps = state => ({
 
 // which actions we are going to be using in this component
 const mapDispatchToProps = {
-  changeCmd,
-  changeDf,
-  changeName,
-  consumeHtmlDf,
-  consumeJsonDf,
-  incrementCount,
-  resetState,
-  updateRows
+  changeAllRowsLoaded,
+  fetchDf,
+  fetchRows,
 };
 
 // connects state attributes and actions to the redux store

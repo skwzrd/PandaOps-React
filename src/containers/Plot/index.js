@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import styled from '../../../node_modules/styled-components';
 import  { Scatter } from 'react-chartjs-2';
 import  { isPlottable } from '../utils';
-import { changeDf } from '../App/actions';
+import { changeDf, loadAllData } from '../App/actions';
 import {
   setXColumn,
   setYColumn,
@@ -32,8 +32,10 @@ const PlotWrapper = styled.div`
 // our functional component with deconstructed props
 function Plot({
   changeDf,
+  loadAllData,
   
   All,
+  all_rows_loaded,
   columns,
   dtypes,
   name,
@@ -179,21 +181,35 @@ function Plot({
     // changeDf(name, All, {status: 1});
     setShowPlot(!show_plot);
   }
+
+  const getMessages = () => {
+    let message = null;
+    if(all_rows_loaded === false){
+      message =
+      <div className="block center">
+        Not plotting all data!
+        <button className="button_error block center pad-t-b" onClick={loadAllData}>Load all data</button>
+      </div>
+    }
+    return message;
+  }
   
+
   let plot = null;
   if(colBtns!==null){
     let cols_y = Object.keys(colBtns.y).map(col => <div id="y" key={col}>{colBtns.y[col]}</div>);
     if(show_plot){
       plot =
         <div className="container wrapper">
-            <div className="grid_display">
-              <div>
-                {cols_y} 
-              </div>
-              <PlotWrapper>
-                { createPlot() }
-              </PlotWrapper>
+          { getMessages() }
+          <div className="grid_display">
+            <div>
+              {cols_y} 
             </div>
+            <PlotWrapper>
+              { createPlot() }
+            </PlotWrapper>
+          </div>
           <div className="center pad_top">
             <div id="x">
               {Object.keys(colBtns.x).map(col => colBtns.x[col])}
@@ -213,6 +229,7 @@ function Plot({
 // type checking our given props
 Plot.propTypes = {
   changeDf: PropTypes.func.isRequired,
+  loadAllData: PropTypes.func.isRequired,
 
   setXColumn: PropTypes.func.isRequired,
   setYColumn: PropTypes.func.isRequired,
@@ -241,7 +258,7 @@ const mapStateToProps = state => ({
   data: state.globalState.data,
   dtypes: state.globalState.dtypes,
   name: state.globalState.name,
-  names: state.globalState.names,
+  all_rows_loaded: state.globalState.all_rows_loaded,
 
   show_plot: state.PlotState.show_plot,
   x_column: state.PlotState.x_column,
@@ -252,6 +269,7 @@ const mapStateToProps = state => ({
 // which actions we are going to be using in this component
 const mapDispatchToProps = {
   changeDf,
+  loadAllData,
   setXColumn,
   setYColumn,
   setShowPlot,

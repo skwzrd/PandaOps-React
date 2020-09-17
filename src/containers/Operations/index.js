@@ -48,6 +48,7 @@ Operations.propTypes = {
   operator: PropTypes.func.isRequired,
 
   All: PropTypes.string.isRequired,
+  cmd: PropTypes.string.isRequired,
 };
 
 // get our state variables from with reselect
@@ -56,6 +57,7 @@ Operations.propTypes = {
 // });
 const mapStateToProps = state => ({
   All: state.globalState.All,
+  cmd: state.globalState.cmd,
 });
 
 // which actions we are going to be using in this component

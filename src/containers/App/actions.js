@@ -24,6 +24,7 @@ import {
 
   CHANGE_CMD,
   CHANGE_NAME,
+  CHANGE_ALL_ROWS_LOADED,
 } from './constants';
 import configs from '../../configs.json';
 import { initialState } from './reducer';
@@ -36,6 +37,11 @@ export const resetState = () => ({
 export const changeName = (name) => ({
   type: CHANGE_NAME,
   name
+})
+
+export const changeAllRowsLoaded = (all_rows_loaded) => ({
+  type: CHANGE_ALL_ROWS_LOADED,
+  all_rows_loaded
 })
 
 export const incrementCount = (value) => ({
@@ -117,6 +123,23 @@ export const fetchDf = (name, cmd) => dispatch => {
     })
   }
   return d;
+}
+
+
+export const fetchRows = (name, lower, all=false) => (dispatch) => {  
+  fetch(`/fetchRows?name=${name}&lower=${lower}&all=${all}`)
+  .then(response => response.json())
+  .then((data) => dispatch(updateRows(data)))
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+}
+
+export const loadAllData = () => (dispatch, getState) => {
+  const {name, fetched_rows, all_rows_loaded} = getState().globalState;
+  if(all_rows_loaded === false){
+    dispatch(fetchRows(name, fetched_rows, true));
+  }
 }
 
 

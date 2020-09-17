@@ -33,10 +33,7 @@ li {
 
 .center {
     text-align: center;
-}
-
-.center_div {
-    align-items: center;
+    margin: auto;
 }
 
 .logo_margin {
@@ -99,7 +96,7 @@ input[type="file"] {
 
 
 body {
-    font-family: sans-serif;
+    font-family: "arial", sans-serif;
     color: #f8f8f0;
     background-color: #1e1e1e;
     background: #1e1e1e;
@@ -202,6 +199,11 @@ html, body, #page, #menu_left, #menu_left_content {
     padding-bottom: 16px;
 }
 
+.pad-t-b {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
 .rendered_html tr,
 .rendered_html th,
 .rendered_html td {
@@ -266,6 +268,7 @@ html, body, #page, #menu_left, #menu_left_content {
     color: white;
     border-radius: 4px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    font: 
 }
 
 .button_success:hover,

@@ -20,7 +20,8 @@ import {
   UPDATE_ROWS,
 
   CHANGE_CMD,
-  CHANGE_NAME
+  CHANGE_NAME,
+  CHANGE_ALL_ROWS_LOADED,
 } from './constants';
 import configs from '../../configs.json';
 
@@ -48,6 +49,7 @@ import configs from '../../configs.json';
 // The initial state of the App
 export const initialState = {
   All: configs.All, // "All"
+  all_rows_loaded: false,
   cleared: false, // when to load initial state from clear button dependency
   cmd: configs.All, // type of table to render
   columns: [], // table columns from pandas' json method
@@ -81,6 +83,10 @@ const appReducer = (state = initialState, action) =>
         draft.names = (draft.names.includes(action.name) === false) ? (draft.names.concat(action.name)) : draft.names;
         break;
 
+      case CHANGE_ALL_ROWS_LOADED:
+        draft.all_rows_loaded = action.all_rows_loaded;
+        break;
+
       case CHANGE_CMD:
         draft.cmd = action.cmd;
         break;
@@ -103,7 +109,7 @@ const appReducer = (state = initialState, action) =>
       
       case UPDATE_ROWS:
         draft.data = draft.data.concat(action.data.df.data);
-        draft.fetched_rows += action.data.fetched_rows;
+        draft.fetched_rows = draft.data.length;
         break;
     }
   });

@@ -40,14 +40,14 @@ def date_cols_to_strfmt(df):
 def get_html_df(df, cmd, lower=0, upper=ROW_CHUNK):
     """Turns dfs into chunked json.
 
-        Have this called after using any date metrics
-        because dates get converted to string due to formatting
-        limitations of to_json().
-        https://github.com/pandas-dev/pandas/issues/22317
-        """
+    Have this called after using any date metrics
+    because dates get converted to string due to formatting
+    limitations of to_json().
+    https://github.com/pandas-dev/pandas/issues/22317
+    """
     if df is not None:
-        df = df.iloc[lower: upper]
         if cmd == props.All:
+            df = df.iloc[lower: upper]
             df = date_cols_to_strfmt(df)
             df = df.to_json(orient='split')
             df = json.loads(df)
@@ -133,16 +133,18 @@ def fetch_rows():
 
     name = request.args.get('name')
     lower = int(request.args.get('lower'))
+    load_all_rows = bool(request.args.get('all'))
 
     d = {}
     d['status'] = 0
     df = c.get_df(name)
 
+    upper = len(df.index) if load_all_rows else ROW_CHUNK
+
     if isinstance(df, pd.DataFrame):
         d['name'] = name
-        df = df.iloc[lower: lower + ROW_CHUNK]
         d['fetched_rows'] = len(df)
-        d['df'] = get_html_df(df, props.All)
+        d['df'] = get_html_df(df, props.All, lower=lower, upper=upper)
         d['status'] = 1
     return jsonify(d)
 
